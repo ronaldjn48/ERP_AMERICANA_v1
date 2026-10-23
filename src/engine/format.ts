@@ -2,15 +2,16 @@ const copFormatter = new Intl.NumberFormat('es-CO', { style: 'currency', currenc
 const intFormatter = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 });
 const decFormatter = new Intl.NumberFormat('es-CO', { maximumFractionDigits: 2, minimumFractionDigits: 2 });
 
-export const cop = (n: number): string => copFormatter.format(Math.round(n)).replace(/ /g, ' ');
+// Espacio no separable entre el símbolo y la cifra: el número nunca se parte en dos líneas.
+export const cop = (n: number): string => copFormatter.format(Math.round(n)).replace(/\s/g, '\u00a0');
 export const num = (n: number): string => intFormatter.format(Math.round(n));
 export const dec = (n: number): string => decFormatter.format(n);
 export const pct = (ratio: number, digits = 1): string =>
-  `${(ratio * 100).toLocaleString('es-CO', { maximumFractionDigits: digits, minimumFractionDigits: digits })} %`;
+  `${(ratio * 100).toLocaleString('es-CO', { maximumFractionDigits: digits, minimumFractionDigits: digits })}\u00a0%`;
 
 /** Millones con un decimal: 12,5 M. Útil en gráficas y tarjetas. */
 export const millions = (n: number): string =>
-  `${(n / 1e6).toLocaleString('es-CO', { maximumFractionDigits: 1, minimumFractionDigits: 1 })} M`;
+  `${(n / 1e6).toLocaleString('es-CO', { maximumFractionDigits: 1, minimumFractionDigits: 1 })}\u00a0M`;
 
 /** Texto de dinero pensado para leerse en voz alta sin símbolos que la voz sintética pronuncie mal. */
 export function pesosHabla(n: number): string {

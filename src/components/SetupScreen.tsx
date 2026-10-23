@@ -6,7 +6,8 @@ import { randomSeed } from '../engine/rng';
 import { MONTHS, SCENARIOS } from '../engine/scenarios';
 import type { Difficulty, SimConfig, StudentProfile } from '../engine/types';
 import type { SaveGame } from '../storage';
-import { SpeakButton, Toggle } from './ui';
+import { copyText, EMBED } from '../export';
+import { ConfirmAction, SpeakButton, Toggle } from './ui';
 
 interface Props {
   initialConfig: SimConfig;
@@ -34,17 +35,12 @@ export function SetupScreen({ initialConfig, initialProfile, assigned, save, onS
 
   const patch = (p: Partial<SimConfig>) => setConfig((c) => sanitizeConfig({ ...c, ...p }));
   const code = encodeConfig(config);
-  const link = typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}#codigo=${code}` : '';
+  const link = typeof window !== 'undefined' ? `${window.location.origin}${window.location.pathname}#${code}` : '';
   const canStart = profile.name.trim().length >= 2;
 
   const copy = async (text: string, what: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(what);
-      window.setTimeout(() => setCopied(null), 2000);
-    } catch {
-      window.prompt('Copia este texto:', text);
-    }
+    setCopied((await copyText(text)) ? what : 'error');
+    window.setTimeout(() => setCopied(null), 2500);
   };
 
   const applyCode = () => {
@@ -86,15 +82,12 @@ export function SetupScreen({ initialConfig, initialProfile, assigned, save, onS
             <button type="button" className="btn-primary" onClick={onResume}>
               Continuar partida
             </button>
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => {
-                if (window.confirm('¿Borrar la partida guardada? Esta acción no se puede deshacer.')) onDiscard();
-              }}
-            >
-              Borrar y empezar otra
-            </button>
+            <ConfirmAction
+              label="Borrar y empezar otra"
+              question="¿Borrar la partida guardada? Esta acción no se puede deshacer."
+              confirmLabel="Sí, borrar"
+              onConfirm={onDiscard}
+            />
           </div>
         </section>
       ) : null}
@@ -258,10 +251,22 @@ export function SetupScreen({ initialConfig, initialProfile, assigned, save, onS
             <button type="button" className="btn-secondary" onClick={() => copy(code, 'codigo')}>
               {copied === 'codigo' ? 'Código copiado' : 'Copiar código'}
             </button>
-            <button type="button" className="btn-secondary" onClick={() => copy(link, 'enlace')}>
-              {copied === 'enlace' ? 'Enlace copiado' : 'Copiar enlace para estudiantes'}
-            </button>
+            {EMBED ? null : (
+              <button type="button" className="btn-secondary" onClick={() => copy(link, 'enlace')}>
+                {copied === 'enlace' ? 'Enlace copiado' : 'Copiar enlace para estudiantes'}
+              </button>
+            )}
           </div>
+          {copied === 'error' ? (
+            <p className="error-text" role="status">
+              El navegador no permitió copiar. Selecciona el código y cópialo manualmente.
+            </p>
+          ) : null}
+          <p className="muted small">
+            {EMBED
+              ? `Para compartir la partida, agrega #${code} al final del enlace de esta página, o pide a los estudiantes que escriban el código.`
+              : 'Los estudiantes también pueden escribir el código en el campo "¿Tu docente te dio un código de partida?".'}
+          </p>
         </details>
 
         <div className="setup-actions">

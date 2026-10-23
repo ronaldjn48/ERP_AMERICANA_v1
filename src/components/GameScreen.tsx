@@ -8,7 +8,7 @@ import { Dashboard } from './Dashboard';
 import { DecisionPanel } from './DecisionPanel';
 import { Glossary } from './Glossary';
 import { ResultsPanel } from './ResultsPanel';
-import { Stat } from './ui';
+import { ConfirmAction, Stat } from './ui';
 
 export type Tab = 'decisiones' | 'resultados' | 'tablero' | 'glosario';
 
@@ -141,15 +141,13 @@ export function GameScreen({ profile, config, state, draft, tab, onTab, onDraft,
       </div>
 
       <div className="row end footer-actions">
-        <button
-          type="button"
+        <ConfirmAction
           className="btn-ghost"
-          onClick={() => {
-            if (window.confirm('¿Salir a la pantalla de inicio? Tu partida queda guardada en este navegador.')) onExit();
-          }}
-        >
-          Salir al inicio
-        </button>
+          label="Salir al inicio"
+          question="¿Salir a la pantalla de inicio? Tu partida queda guardada en este navegador."
+          confirmLabel="Sí, salir"
+          onConfirm={onExit}
+        />
       </div>
     </main>
   );

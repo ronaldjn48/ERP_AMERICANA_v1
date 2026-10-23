@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { QUIZ, REFLECTION_PROMPTS } from '../content/pedagogy';
 import { DIFFICULTIES, encodeConfig } from '../engine/config';
 import { analyzePeriod } from '../engine/feedback';
@@ -6,10 +6,10 @@ import { cop, millions, num, pct, pesosHabla } from '../engine/format';
 import { MONTHS, getScenario } from '../engine/scenarios';
 import { finalGrade } from '../engine/simulation';
 import type { Feedback, SimConfig, SimState, StudentProfile } from '../engine/types';
-import { exportCsv, exportJson } from '../export';
+import { buildCsv, copyText, EMBED, exportCsv, exportJson } from '../export';
 import { LineChart } from './Charts';
 import { historyLabels } from './Dashboard';
-import { Meter, SpeakButton, Stat } from './ui';
+import { ConfirmAction, Meter, SpeakButton, Stat } from './ui';
 
 interface Props {
   profile: StudentProfile;
@@ -72,6 +72,32 @@ export function FinalReport({ profile, config, state, reflections, quiz, onRefle
 
   const answered = QUIZ.filter((q) => quiz[q.id] !== undefined);
   const correct = answered.filter((q) => quiz[q.id] === q.answer).length;
+
+  const [copied, setCopied] = useState<string | null>(null);
+  const copy = async (text: string, what: string) => {
+    setCopied((await copyText(text)) ? what : 'error');
+    window.setTimeout(() => setCopied(null), 3000);
+  };
+  const evidence = {
+    estudiante: profile,
+    codigo: encodeConfig(config),
+    configuracion: config,
+    nota: grade,
+    reflexion: REFLECTION_PROMPTS.map((p, i) => ({ pregunta: p, respuesta: reflections[i] ?? '' })),
+    evaluacion: { correctas: correct, respondidas: answered.length, total: QUIZ.length },
+    historial: h,
+  };
+  const summaryText = [
+    `Informe final ERP Americana · ${s.company}`,
+    `Estudiante: ${profile.name}${profile.group ? ` · ${profile.group}` : ''}`,
+    `Código de partida: ${encodeConfig(config)} · ${h.length} meses`,
+    `Nota: ${grade.toFixed(1).replace('.', ',')} / 5,0 · ${v.label}`,
+    `Ventas acumuladas: ${cop(totals.revenue)} · Utilidad neta acumulada: ${cop(totals.netIncome)}`,
+    `Evaluación de conceptos: ${correct} de ${QUIZ.length} correctas`,
+    '',
+    'Reflexión gerencial',
+    ...REFLECTION_PROMPTS.map((p, i) => `${i + 1}. ${p}\n${reflections[i]?.trim() || '(sin respuesta)'}`),
+  ].join('\n');
 
   const speech =
     `Informe final de ${profile.name}. Dirigiste ${s.company} durante ${h.length} meses. ` +
@@ -179,7 +205,10 @@ export function FinalReport({ profile, config, state, reflections, quiz, onRefle
 
       <section className="card" aria-labelledby="reflexion-title">
         <h2 id="reflexion-title">Reflexión gerencial</h2>
-        <p className="muted">Responde con datos de tu simulación. Tus respuestas se incluyen en el informe impreso y en el archivo exportado.</p>
+        <p className="muted">
+          Responde con datos de tu simulación. Tus respuestas se incluyen{' '}
+          {EMBED ? 'al copiar el informe.' : 'en el informe impreso y en el archivo exportado.'}
+        </p>
         {REFLECTION_PROMPTS.map((p, i) => (
           <label key={p} className="stack">
             <span>
@@ -273,42 +302,41 @@ export function FinalReport({ profile, config, state, reflections, quiz, onRefle
         <button type="button" className="btn-secondary" onClick={onBack}>
           Volver al tablero
         </button>
-        <button type="button" className="btn-secondary" onClick={() => window.print()}>
-          Imprimir o guardar PDF
-        </button>
-        <button type="button" className="btn-secondary" onClick={() => exportCsv(h, profile, config)}>
-          Descargar datos (CSV)
-        </button>
-        <button
-          type="button"
-          className="btn-secondary"
-          onClick={() =>
-            exportJson(
-              {
-                estudiante: profile,
-                codigo: encodeConfig(config),
-                configuracion: config,
-                nota: grade,
-                reflexion: REFLECTION_PROMPTS.map((p, i) => ({ pregunta: p, respuesta: reflections[i] ?? '' })),
-                evaluacion: { correctas: correct, respondidas: answered.length, total: QUIZ.length },
-                historial: h,
-              },
-              profile,
-            )
-          }
-        >
-          Descargar evidencia (JSON)
-        </button>
-        <button
-          type="button"
+        {EMBED ? (
+          <>
+            <button type="button" className="btn-secondary" onClick={() => copy(buildCsv(h, profile, config), 'csv')}>
+              {copied === 'csv' ? 'Datos copiados: pégalos en Excel' : 'Copiar datos para Excel'}
+            </button>
+            <button type="button" className="btn-secondary" onClick={() => copy(summaryText, 'resumen')}>
+              {copied === 'resumen' ? 'Informe copiado' : 'Copiar informe y reflexión'}
+            </button>
+          </>
+        ) : (
+          <>
+            <button type="button" className="btn-secondary" onClick={() => window.print()}>
+              Imprimir o guardar PDF
+            </button>
+            <button type="button" className="btn-secondary" onClick={() => exportCsv(h, profile, config)}>
+              Descargar datos (CSV)
+            </button>
+            <button type="button" className="btn-secondary" onClick={() => exportJson(evidence, profile)}>
+              Descargar evidencia (JSON)
+            </button>
+          </>
+        )}
+        <ConfirmAction
           className="btn-primary"
-          onClick={() => {
-            if (window.confirm('¿Iniciar una nueva simulación? La partida actual se borrará de este navegador.')) onRestart();
-          }}
-        >
-          Nueva simulación
-        </button>
+          label="Nueva simulación"
+          question="¿Iniciar una nueva simulación? La partida actual se borrará de este navegador."
+          confirmLabel="Sí, empezar de nuevo"
+          onConfirm={onRestart}
+        />
       </div>
+      {copied === 'error' ? (
+        <p className="error-text no-print" role="status">
+          El navegador no permitió copiar. Usa la tabla del tablero para registrar tus datos.
+        </p>
+      ) : null}
     </main>
   );
 }

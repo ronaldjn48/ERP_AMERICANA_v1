@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import { narrator, useNarrator } from '../audio';
 import { toSpeech } from '../engine/format';
 
@@ -134,6 +134,54 @@ export function Meter({ label, value, max, suffix }: { label: string; value: num
       </div>
       <div className="meter-track" role="meter" aria-valuemin={0} aria-valuemax={max} aria-valuenow={value} aria-label={label}>
         <div className={`meter-fill tone-${tone}`} style={{ width: `${ratio * 100}%` }} />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Botón con confirmación dentro de la página. Reemplaza window.confirm(), que los iframes
+ * (aulas virtuales, páginas incrustadas) bloquean o devuelven siempre "cancelar".
+ */
+export function ConfirmAction({
+  label,
+  question,
+  confirmLabel,
+  onConfirm,
+  className = 'btn-secondary',
+}: {
+  label: string;
+  question: string;
+  confirmLabel: string;
+  onConfirm: () => void;
+  className?: string;
+}) {
+  const [asking, setAsking] = useState(false);
+  if (!asking) {
+    return (
+      <button type="button" className={className} onClick={() => setAsking(true)}>
+        {label}
+      </button>
+    );
+  }
+  return (
+    <div className="confirm" role="alertdialog" aria-label={question}>
+      <p>{question}</p>
+      <div className="row wrap">
+        <button
+          type="button"
+          className="btn-primary"
+          autoFocus
+          onClick={() => {
+            setAsking(false);
+            onConfirm();
+          }}
+        >
+          {confirmLabel}
+        </button>
+        <button type="button" className="btn-secondary" onClick={() => setAsking(false)}>
+          Cancelar
+        </button>
       </div>
     </div>
   );

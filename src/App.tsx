@@ -26,7 +26,8 @@ import {
 
 function configFromHash(): SimConfig | null {
   if (typeof window === 'undefined') return null;
-  const m = window.location.hash.match(/codigo=([A-Za-z0-9-]+)/);
+  // Acepta #CODIGO (también funciona en páginas incrustadas) y el formato anterior #codigo=CODIGO.
+  const m = window.location.hash.match(/^#(?:codigo=)?([A-Za-z0-9-]+)$/);
   return m ? decodeConfig(decodeURIComponent(m[1])) : null;
 }
 

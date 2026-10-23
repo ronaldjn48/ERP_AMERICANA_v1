@@ -108,7 +108,7 @@ export function ResultsPanel({ result, prev, config }: { result: PeriodResult | 
                 <td>{cop(r.ebt)}</td>
               </tr>
               <tr>
-                <th scope="row">(−) Impuesto de renta (35 %)</th>
+                <th scope="row">(−) Impuesto de renta (35 %)</th>
                 <td>{cop(r.tax)}</td>
               </tr>
               <tr className={`total ${r.netIncome < 0 ? 'bad-text' : 'good-text'}`}>

@@ -59,9 +59,10 @@ export function AudioBar({ prefs, onChange }: { prefs: AudioPrefs; onChange: (p:
         className="btn-ghost"
         aria-expanded={open}
         aria-haspopup="dialog"
+        aria-label="Configuración de audio"
         onClick={() => setOpen((o) => !o)}
       >
-        <span aria-hidden="true">{prefs.narrator.enabled ? '🔊' : '🔇'}</span> Audio
+        <span aria-hidden="true">{prefs.narrator.enabled ? '🔊' : '🔇'}</span> <span className="btn-label">Audio</span>
       </button>
       {open ? (
         <div className="audio-panel" role="dialog" aria-label="Configuración de audio">

@@ -57,8 +57,21 @@ const COLUMNS: Array<[string, (r: PeriodResult) => string | number]> = [
   ['Puntaje total', (r) => r.score.total],
 ];
 
+/** Versión incrustada (iframe sin descargas ni impresión): se activa al compilar con VITE_EMBED=1. */
+export const EMBED = import.meta.env.VITE_EMBED === '1';
+
+/** Copia texto al portapapeles. Devuelve false si el navegador lo impide. */
+export async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** CSV con separador punto y coma, que Excel en español abre sin configuración adicional. */
-export function exportCsv(history: PeriodResult[], profile: StudentProfile, config: SimConfig) {
+export function buildCsv(history: PeriodResult[], profile: StudentProfile, config: SimConfig): string {
   const esc = (v: string | number) => {
     const s = String(v);
     return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
@@ -66,7 +79,12 @@ export function exportCsv(history: PeriodResult[], profile: StudentProfile, conf
   const meta = [`Estudiante;${esc(profile.name)}`, `Grupo;${esc(profile.group)}`, `Código de partida;${encodeConfig(config)}`, ''];
   const header = COLUMNS.map(([h]) => esc(h)).join(';');
   const rows = history.map((r) => COLUMNS.map(([, f]) => esc(f(r))).join(';'));
-  download(`erp-americana-${slug(profile.name)}.csv`, '﻿' + [...meta, header, ...rows].join('\r\n'), 'text/csv;charset=utf-8');
+  return [...meta, header, ...rows].join('\r\n');
+}
+
+export function exportCsv(history: PeriodResult[], profile: StudentProfile, config: SimConfig) {
+  // El BOM inicial hace que Excel reconozca las tildes (UTF-8).
+  download(`erp-americana-${slug(profile.name)}.csv`, '\ufeff' + buildCsv(history, profile, config), 'text/csv;charset=utf-8');
 }
 
 export function exportJson(data: unknown, profile: StudentProfile) {

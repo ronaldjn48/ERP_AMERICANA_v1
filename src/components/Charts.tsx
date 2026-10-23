@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 export interface Series {
   name: string;
@@ -17,9 +17,25 @@ interface LineChartProps {
   minZero?: boolean;
 }
 
-const W = 640;
 const H = 240;
 const PAD = { l: 64, r: 16, t: 16, b: 32 };
+
+/** Ancho real del contenedor: la gráfica se dibuja a escala 1:1 y el texto conserva su tamaño en celulares. */
+function useWidth(fallback: number) {
+  const ref = useRef<HTMLElement>(null);
+  const [width, setWidth] = useState(fallback);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const update = () => setWidth(Math.max(260, Math.round(el.clientWidth)));
+    update();
+    if (typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  return [ref, width] as const;
+}
 
 function niceTicks(min: number, max: number, count = 4): number[] {
   if (min === max) return [min];
@@ -35,9 +51,16 @@ function niceTicks(min: number, max: number, count = 4): number[] {
 export function LineChart({ title, labels, series, format, reference, minZero = true }: LineChartProps) {
   const id = useId();
   const [hover, setHover] = useState<number | null>(null);
+  const [ref, W] = useWidth(640);
+  const PADL = W < 420 ? 52 : PAD.l;
   const all = series.flatMap((s) => s.values).concat(reference ? [reference.value] : []);
   if (labels.length === 0 || all.length === 0) {
-    return <p className="empty">La gráfica aparece después del primer mes.</p>;
+    return (
+      <figure className="chart" ref={ref}>
+        <figcaption>{title}</figcaption>
+        <p className="empty">La gráfica aparece después del primer mes.</p>
+      </figure>
+    );
   }
   let min = Math.min(...all, minZero ? 0 : Infinity);
   let max = Math.max(...all, minZero ? 0 : -Infinity);
@@ -48,12 +71,18 @@ export function LineChart({ title, labels, series, format, reference, minZero = 
   const ticks = niceTicks(min, max);
   min = Math.min(min, ticks[0]);
   max = Math.max(max, ticks[ticks.length - 1]);
-  const x = (i: number) => PAD.l + (labels.length === 1 ? (W - PAD.l - PAD.r) / 2 : (i * (W - PAD.l - PAD.r)) / (labels.length - 1));
+  const plotW = W - PADL - PAD.r;
+  const x = (i: number) => PADL + (labels.length === 1 ? plotW / 2 : (i * plotW) / (labels.length - 1));
   const y = (v: number) => PAD.t + ((max - v) * (H - PAD.t - PAD.b)) / (max - min);
-  const step = labels.length > 1 ? (W - PAD.l - PAD.r) / (labels.length - 1) : W;
+  const step = labels.length > 1 ? plotW / (labels.length - 1) : plotW;
+  // Máximo de etiquetas del eje X que caben sin encimarse (unos 34 px por etiqueta).
+  const labelEvery = Math.max(1, Math.ceil(labels.length / Math.max(2, Math.floor(plotW / 34))));
+  // Zonas sensibles al puntero recortadas al área de dibujo para no desbordar la página.
+  const hitX = (i: number) => Math.max(PADL, x(i) - step / 2);
+  const hitW = (i: number) => Math.min(W - PAD.r, x(i) + step / 2) - hitX(i);
 
   return (
-    <figure className="chart">
+    <figure className="chart" ref={ref}>
       <figcaption id={`${id}-t`}>{title}</figcaption>
       <div className="chart-legend" aria-hidden="true">
         {series.map((s) => (
@@ -63,26 +92,26 @@ export function LineChart({ title, labels, series, format, reference, minZero = 
           </span>
         ))}
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-t`} onMouseLeave={() => setHover(null)}>
+      <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} role="img" aria-labelledby={`${id}-t`} onMouseLeave={() => setHover(null)}>
         {ticks.map((t) => (
           <g key={t}>
-            <line x1={PAD.l} x2={W - PAD.r} y1={y(t)} y2={y(t)} className="grid" />
-            <text x={PAD.l - 8} y={y(t) + 4} textAnchor="end" className="axis">
+            <line x1={PADL} x2={W - PAD.r} y1={y(t)} y2={y(t)} className="grid" />
+            <text x={PADL - 8} y={y(t) + 4} textAnchor="end" className="axis">
               {format(t)}
             </text>
           </g>
         ))}
-        {min < 0 && max > 0 ? <line x1={PAD.l} x2={W - PAD.r} y1={y(0)} y2={y(0)} className="zero" /> : null}
+        {min < 0 && max > 0 ? <line x1={PADL} x2={W - PAD.r} y1={y(0)} y2={y(0)} className="zero" /> : null}
         {reference ? (
           <g>
-            <line x1={PAD.l} x2={W - PAD.r} y1={y(reference.value)} y2={y(reference.value)} className="reference" />
+            <line x1={PADL} x2={W - PAD.r} y1={y(reference.value)} y2={y(reference.value)} className="reference" />
             <text x={W - PAD.r} y={y(reference.value) - 4} textAnchor="end" className="axis">
               {reference.label}
             </text>
           </g>
         ) : null}
         {labels.map((l, i) =>
-          labels.length <= 12 || i % Math.ceil(labels.length / 12) === 0 ? (
+          i % labelEvery === 0 ? (
             <text key={i} x={x(i)} y={H - 10} textAnchor="middle" className="axis">
               {l}
             </text>
@@ -108,9 +137,9 @@ export function LineChart({ title, labels, series, format, reference, minZero = 
         {labels.map((_, i) => (
           <rect
             key={i}
-            x={x(i) - step / 2}
+            x={hitX(i)}
             y={PAD.t}
-            width={step}
+            width={Math.max(0, hitW(i))}
             height={H - PAD.t - PAD.b}
             fill="transparent"
             onMouseEnter={() => setHover(i)}
@@ -129,29 +158,31 @@ export function LineChart({ title, labels, series, format, reference, minZero = 
           ))}
         </div>
       ) : null}
-      <table className="sr-only">
-        <caption>{title}</caption>
-        <thead>
-          <tr>
-            <th scope="col">Mes</th>
-            {series.map((s) => (
-              <th key={s.name} scope="col">
-                {s.name}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {labels.map((l, i) => (
-            <tr key={i}>
-              <th scope="row">{l}</th>
+      <div className="sr-only">
+        <table>
+          <caption>{title}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Mes</th>
               {series.map((s) => (
-                <td key={s.name}>{format(s.values[i])}</td>
+                <th key={s.name} scope="col">
+                  {s.name}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {labels.map((l, i) => (
+              <tr key={i}>
+                <th scope="row">{l}</th>
+                {series.map((s) => (
+                  <td key={s.name}>{format(s.values[i])}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }

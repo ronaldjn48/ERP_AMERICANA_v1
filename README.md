@@ -17,7 +17,8 @@ El simulador funciona en el navegador, sin servidor, sin claves de API y sin con
 | Evaluación | Cuadro de mando integral (finanzas 40, clientes 30, procesos 30), nota de 0,0 a 5,0, fortalezas y aspectos a mejorar, cuatro preguntas de reflexión y diez preguntas tipo Saber Pro con explicación. |
 | Evidencias | Informe imprimible o en PDF, datos en CSV (separador punto y coma para Excel en español) y evidencia en JSON. |
 | Audio | Narración en español con selección de voz, velocidad y volumen, lectura automática de resultados y eventos, botones "Escuchar" en cada texto y efectos de sonido sintetizados. |
-| Accesibilidad | Navegación por teclado, etiquetas en todos los controles, tablas alternativas para las gráficas, anuncios para lectores de pantalla, modo oscuro automático y diseño adaptable a celular. |
+| Accesibilidad | Navegación por teclado, etiquetas en todos los controles, tablas alternativas para las gráficas, anuncios para lectores de pantalla y modo oscuro automático. |
+| Diseño adaptable | Verificado sin desplazamiento horizontal en 320, 375, 414, 768, 1024 y 1440 px, en las 10 vistas. Las gráficas se dibujan al ancho real de la pantalla para que el texto conserve su tamaño en celular. |
 
 ## Estabilidad del audio
 
@@ -44,7 +45,10 @@ npm install
 npm run dev        # servidor de desarrollo en http://localhost:5173
 npm run check      # verificación de tipos + pruebas + build
 npm run build      # genera la carpeta dist/
+npm run build:incrustado  # un solo HTML para iframes: dist-embed/erp-americana.html
 ```
+
+La versión incrustada carga React 18 desde cdnjs, no usa ventanas emergentes del navegador y reemplaza la impresión y las descargas por botones que copian el informe y los datos al portapapeles. Sirve para páginas que bloquean descargas, como algunas aulas virtuales.
 
 La carpeta `dist/` usa rutas relativas. Se puede publicar en GitHub Pages, subir como paquete a un LMS (Moodle, Canvas, Blackboard) o abrir desde cualquier servidor estático.
 

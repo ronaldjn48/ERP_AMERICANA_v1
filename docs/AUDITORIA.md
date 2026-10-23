@@ -52,10 +52,21 @@ Ninguno de los dos repositorios contenía código fuente, dependencias, configur
 | `vite build` | Build de producción de 310 kB (98 kB comprimido). |
 | Prueba de extremo a extremo en Chromium | Configuración, sesión informativa, 12 meses con evento corporativo, recarga y reanudación de la partida, tablero, glosario, informe final y evaluación sin errores de consola. |
 | Narración en el navegador | 32 locuciones en la prueba, ningún fragmento mayor a 160 caracteres, idioma es-CO. |
-| Celular (375 px) | Sin desplazamiento horizontal en configuración, decisiones y resultados. |
+| Diseño adaptable | Prueba automática en 6 anchos (320, 375, 414, 768, 1024 y 1440 px) y 10 vistas (configuración, panel de audio, panel docente, sesión informativa, decisiones, decisiones con evento, resultados, tablero, glosario e informe final): 0 px de desplazamiento horizontal en la versión completa y en la incrustada. |
 | Enlace del docente | El código en la URL bloquea la configuración y la muestra al estudiante. |
 
-## 5. Recomendaciones pendientes
+## 5. Correcciones de diseño adaptable (segunda revisión)
+
+| Problema encontrado | Corrección |
+|---|---|
+| El tablero se desbordaba 77 px a 320 px: las tablas ocultas para lectores de pantalla ignoraban el ancho de 1 px. | Las tablas quedan dentro de un contenedor recortado. |
+| En celular el texto de las gráficas medía cerca de 5 px. | Cada gráfica se dibuja al ancho real de su contenedor y reduce las etiquetas del eje X si no caben. |
+| Las pestañas se cortaban en celular. | Cuadrícula de 2 × 2 por debajo de 560 px. |
+| Cifras partidas en dos líneas ("$" arriba y el número abajo). | Espacio no separable en moneda, porcentajes y millones. |
+| La barra de audio no cabía a 320 px mientras narraba. | El botón muestra solo el ícono en pantallas angostas. |
+| Las confirmaciones usaban `window.confirm`, que los iframes de las aulas virtuales bloquean. | Confirmación dentro de la página. |
+
+## 6. Recomendaciones pendientes
 
 1. Activar GitHub Pages (Settings → Pages → Source: GitHub Actions) para publicar el simulador.
 2. Si el código original de AI Studio existe, subirlo a una rama aparte para compararlo con esta versión antes de descartarlo.
