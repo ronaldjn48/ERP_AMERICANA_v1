@@ -66,7 +66,44 @@ Ninguno de los dos repositorios contenía código fuente, dependencias, configur
 | La barra de audio no cabía a 320 px mientras narraba. | El botón muestra solo el ícono en pantallas angostas. |
 | Las confirmaciones usaban `window.confirm`, que los iframes de las aulas virtuales bloquean. | Confirmación dentro de la página. |
 
-## 6. Recomendaciones pendientes
+## 6. Tercera revisión: transformación en suite ERP
+
+Solicitud: que el aplicativo se parezca a un ERP real, con múltiples módulos, registros editables y configurables, una práctica o misión por módulo con gamificación y navegación de software empresarial, conservando el audio.
+
+### Arquitectura agregada
+
+| Capa | Archivos | Responsabilidad |
+|---|---|---|
+| Datos y reglas de negocio | `src/erp/ops.ts`, `accounts.ts`, `day.ts`, `seed.ts` | Operaciones puras con validación (NIT, cupo de crédito, inventario disponible, saldo en bancos, partida doble), asientos automáticos con PUC, kardex a costo promedio y cierre diario determinista con eventos de mercado y reglas de automatización. |
+| Gamificación | `src/erp/missions.ts` | 20 misiones con objetivos que se verifican en los datos, preguntas de cálculo con datos propios del estudiante, XP, 6 niveles y 10 insignias. Las acciones de las automatizaciones no cuentan como acciones del estudiante. |
+| Estado de la interfaz | `src/erp/store.ts` | Persistencia local, navegación, avisos, celebración de logros, sonidos y narración. |
+| Interfaz empresarial | `src/shell`, `src/modules`, `src/ui` | Barra lateral con contadores de pendientes, barra superior con reloj de operación, buscador global (Ctrl + K), notificaciones, misión activa flotante, tablas ordenables con búsqueda y paginación, paneles laterales de registro y formularios con validación. |
+
+Lo que se conservó sin cambios de lógica: el motor del simulador gerencial, su retroalimentación, la evaluación tipo Saber Pro, el narrador por voz y los efectos de sonido.
+
+### Defectos encontrados y corregidos durante la verificación
+
+| Defecto | Corrección |
+|---|---|
+| El panel lateral reiniciaba su efecto en cada renderizado: el foco del teclado saltaba al fondo y Escape a veces no lo cerraba. | Referencia estable a la función de cierre; el efecto solo corre al abrir o cerrar. |
+| Dentro del panel lateral, las tablas con desplazamiento se comprimían y ocultaban las filas de IVA y total. | Los elementos del panel no se encogen. |
+| Los avisos emergentes tapaban los interruptores de la esquina superior derecha. | En escritorio los avisos aparecen abajo a la izquierda; máximo 3 y el resumen del día reemplaza al anterior. |
+| El panel de la misión activa tapaba los botones del final de la página. | Espacio inferior reservado según el panel esté desplegado o plegado; en celular empieza plegado. |
+| Textos ocultos para lectores de pantalla ensanchaban la página 150 px en celular. | Los contenedores con desplazamiento son su bloque contenedor. |
+| El botón "Cerrar día" perdía su nombre accesible cuando solo mostraba el ícono. | Etiqueta accesible fija. |
+| Los paneles de audio y notificaciones se salían por la izquierda en celular. | En celular ocupan el ancho útil de la pantalla. |
+| El botón de menú aparecía en escritorio. | Solo se muestra por debajo de 1024 px. |
+
+### Verificación
+
+| Verificación | Resultado |
+|---|---|
+| Pruebas automatizadas | 54 de 54: 10 del ERP (ciclo de venta y compra con asientos, cupo e inventario, pasarela, asientos manuales, ajustes, 60 días con reglas activas, determinismo, libros cuadrados y kardex igual a contabilidad), 4 de misiones, 27 del simulador y 13 del audio. |
+| Recorrido completo en Chromium (versión del repositorio y versión web) | Crear espacio, misión 1 con celebración, cliente corporativo y pregunta, ciclo de venta con pregunta de IVA, ciclo de compra con recepción y pago, ajuste y kardex, publicación y campaña, reglas automáticas durante 6 días, balance de prueba cuadrado, buscador global y 2 meses del simulador: sin errores de consola. |
+| Diseño adaptable | 108 vistas (18 vistas × 6 anchos de 320 a 1440 px): 0 px de desplazamiento horizontal en las dos versiones. |
+| Carga de trabajo diaria | Con actividad normal: unas 2,3 ventas web, 0,3 cotizaciones, 0,5 oportunidades y 0,6 casos por día; cada cierre de día tarda unos 5 ms; un mes de operación ocupa cerca de 100 KB de almacenamiento. |
+
+## 7. Recomendaciones pendientes
 
 1. Activar GitHub Pages (Settings → Pages → Source: GitHub Actions) para publicar el simulador.
 2. Si el código original de AI Studio existe, subirlo a una rama aparte para compararlo con esta versión antes de descartarlo.

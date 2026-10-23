@@ -107,7 +107,7 @@ export function FinalReport({ profile, config, state, reflections, quiz, onRefle
     'Completa la reflexión y la evaluación de conceptos para cerrar la actividad.';
 
   return (
-    <main className="container final" id="contenido">
+    <div className="container final" id="contenido">
       <section className="card report-head">
         <div className="row between wrap">
           <div>
@@ -337,6 +337,6 @@ export function FinalReport({ profile, config, state, reflections, quiz, onRefle
           El navegador no permitió copiar. Usa la tabla del tablero para registrar tus datos.
         </p>
       ) : null}
-    </main>
+    </div>
   );
 }

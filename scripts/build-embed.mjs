@@ -7,7 +7,7 @@ const js = readFileSync('dist-embed/app.js', 'utf8').replace(/<\/script/gi, '<\\
 const css = readFileSync('dist-embed/app.css', 'utf8');
 const html = `<title>ERP Americana</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Simulador educativo de toma de decisiones gerenciales con ERP, CRM, e-commerce y automatización de procesos.">
+<meta name="description" content="Suite ERP educativa con CRM, ventas, comercio electrónico, inventario, compras, contabilidad, automatización y misiones gamificadas.">
 <style>${css}</style>
 <div id="root"></div>
 <noscript>Este simulador necesita JavaScript habilitado.</noscript>

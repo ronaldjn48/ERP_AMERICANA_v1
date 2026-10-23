@@ -1,8 +1,8 @@
-# Guía docente · Simulador ERP Americana
+# Guía docente · ERP Americana
 
 ## 1. Propósito
 
-El simulador desarrolla la toma de decisiones gerenciales con información integrada. El estudiante dirige una empresa colombiana y comprueba cómo una decisión de un área (por ejemplo, la compra de inventario) afecta a las demás (servicio al cliente, pauta digital, caja y utilidad).
+ERP Americana tiene dos niveles. En el nivel operativo, el estudiante trabaja en una suite ERP con módulos de CRM, ventas, comercio electrónico, inventario, compras, contabilidad y automatización, guiado por misiones gamificadas. En el nivel estratégico, el simulador gerencial resume la empresa en decisiones mensuales. Ambos desarrollan la toma de decisiones con información integrada. El estudiante dirige una empresa colombiana y comprueba cómo una decisión de un área (por ejemplo, la compra de inventario) afecta a las demás (servicio al cliente, pauta digital, caja y utilidad).
 
 Público: estudiantes de administración de empresas, negocios internacionales, mercadeo, contaduría, logística y programas técnicos o tecnológicos afines.
 
@@ -15,18 +15,64 @@ Público: estudiantes de administración de empresas, negocios internacionales, 
 5. Justificar inversiones en automatización de procesos con un análisis costo-beneficio.
 6. Proteger la liquidez de la empresa con un flujo de caja proyectado y el uso responsable del crédito.
 
-## 3. Cómo asignar la misma partida a todo el grupo
+## 3. Práctica en la suite ERP con misiones
 
-1. Abra el simulador y despliegue "Panel docente".
+El estudiante crea su espacio de trabajo con nombre, grupo, empresa y actividad del mercado (o con el código del docente). Desde ahí opera como en un software empresarial: registra datos, procesa documentos y cierra días. El centro de misiones verifica en los datos si cumplió cada objetivo.
+
+| # | Misión | Módulo | Concepto | XP |
+|---|---|---|---|---|
+| 1 | Primer día en la empresa | Inicio | Datos maestros y navegación | 100 |
+| 2 | Registra un cliente corporativo | CRM | Maestro de clientes | 120 |
+| 3 | Gestiona el embudo comercial | CRM | Etapas del embudo y conversión | 150 |
+| 4 | Servicio al cliente | CRM | Gestión de casos | 150 |
+| 5 | Ciclo completo de venta | Ventas | Order to cash, IVA | 200 |
+| 6 | Descuento sin perder margen | Ventas | Margen bruto | 120 |
+| 7 | Kardex y conteo físico | Inventario | Costo promedio ponderado | 150 |
+| 8 | Punto de reorden | Inventario | Demanda × tiempo de entrega + seguridad | 150 |
+| 9 | Registra un proveedor | Compras | Maestro de proveedores | 80 |
+| 10 | Ciclo completo de compra | Compras | Procure to pay, IVA descontable | 200 |
+| 11 | Publica tu catálogo | Comercio electrónico | Precio mínimo de venta | 100 |
+| 12 | Atiende los pedidos web | Comercio electrónico | Cumplimiento en línea | 150 |
+| 13 | Campaña rentable | Comercio electrónico | ROAS de equilibrio | 250 |
+| 14 | Partida doble | Contabilidad | Libro diario y balance de prueba | 150 |
+| 15 | Cartera al día | Contabilidad | Cuentas por cobrar | 150 |
+| 16 | Tu primer flujo automático | Automatización | Automatización de procesos | 200 |
+| 17 | Reabastecimiento inteligente | Automatización | Integración inventario–compras | 200 |
+| 18 | Cierre del primer mes | Contabilidad | Estado de resultados | 300 |
+| 19 | Racha operativa | Inicio | Nivel de servicio | 200 |
+| 20 | Reto gerencial | Simulador | Decisiones estratégicas | 300 |
+
+Niveles por experiencia: Practicante (0 XP), Auxiliar administrativo (300), Analista de operaciones (800), Coordinador(a) de área (1.500), Jefe(a) de operaciones (2.300) y Gerente general (3.200). Acertar una pregunta de cálculo al primer intento suma 20 XP. Hay 10 insignias: una por cada módulo completo y tres especiales.
+
+Varias misiones tienen preguntas de verificación con datos de la propia empresa (por ejemplo, el IVA de la última factura o el saldo de bancos). Como cada estudiante tiene datos distintos, la respuesta no se puede copiar.
+
+### Secuencia sugerida en cuatro sesiones
+
+| Sesión | Misiones | Actividad de cierre |
+|---|---|---|
+| 1. Navegación y CRM | 1 a 4 | Comparar el embudo de oportunidades de tres estudiantes. |
+| 2. Ventas e inventario | 5 a 8 | Explicar en plenaria los asientos que generó un pedido. |
+| 3. Compras y comercio electrónico | 9 a 13 | Analizar qué campañas superaron el ROAS de equilibrio. |
+| 4. Contabilidad, automatización y cierre | 14 a 20 | Presentar el estado de resultados del mes y la automatización que más tiempo ahorró. |
+
+### Evidencias de la práctica en el ERP
+
+- Captura del Centro de misiones con nivel, XP e insignias.
+- Respaldo de la práctica (Configuración → Copiar respaldo), que el docente puede restaurar en su navegador para revisar los registros.
+- Estado de resultados y balance general del módulo de Contabilidad.
+
+## 4. Cómo asignar la misma partida a todo el grupo
+
+1. Abra el Simulador gerencial y despliegue "Panel docente".
 2. Elija empresa, nivel, duración, mes de inicio, módulos y modo guiado.
 3. Copie el código (por ejemplo `MODA-I-12-2-482913-ECWAF-G`) o el enlace para estudiantes.
 4. Publique el enlace en el aula virtual. Al abrirlo, el estudiante ve la configuración bloqueada y solo escribe su nombre y grupo.
 
-Con el mismo código todos enfrentan la misma demanda y los mismos eventos. Las diferencias en la nota se explican solo por las decisiones, lo que permite discutir en plenaria quién decidió mejor y por qué.
+El mismo código sirve para el ERP: al crear el espacio de trabajo, el estudiante lo escribe en "Código del docente" y queda con la misma empresa, la misma semilla del mercado, la actividad del nivel elegido y solo los módulos marcados. Con el mismo código todos enfrentan la misma demanda y los mismos eventos. Las diferencias en la nota se explican solo por las decisiones, lo que permite discutir en plenaria quién decidió mejor y por qué.
 
 Estructura del código: `EMPRESA-NIVEL-MESES-MESINICIO-SEMILLA-MÓDULOS-GUIADO`. Niveles: B básico, I intermedio, A avanzado. Módulos: E ERP, C CRM, W e-commerce, A automatización, F finanzas. G modo guiado, L libre.
 
-## 4. Configuraciones sugeridas por tema
+## 5. Configuraciones sugeridas por tema
 
 | Tema de la clase | Empresa | Módulos | Inicio | Duración | Nivel |
 |---|---|---|---|---|---|
@@ -37,7 +83,7 @@ Estructura del código: `EMPRESA-NIVEL-MESES-MESINICIO-SEMILLA-MÓDULOS-GUIADO`.
 | Automatización de procesos | Café del Atlántico | A | Marzo | 6 | Básico |
 | Integración gerencial completa | Cualquiera | Todos | Julio | 12 | Intermedio o avanzado |
 
-## 5. Planeación de una sesión de 3 horas
+## 6. Planeación de una sesión de 3 horas
 
 | Momento | Tiempo | Actividad |
 |---|---|---|
@@ -50,7 +96,7 @@ Estructura del código: `EMPRESA-NIVEL-MESES-MESINICIO-SEMILLA-MÓDULOS-GUIADO`.
 
 Para sesiones de 90 minutos use 6 meses y deje la reflexión como trabajo independiente.
 
-## 6. Evidencias de aprendizaje
+## 7. Evidencias de aprendizaje
 
 | Evidencia | Tipo | Cómo se obtiene |
 |---|---|---|
@@ -59,7 +105,7 @@ Para sesiones de 90 minutos use 6 meses y deje la reflexión como trabajo indepe
 | Evidencia completa (JSON) | Desempeño | Botón "Descargar evidencia (JSON)". Útil para revisión automatizada. |
 | Evaluación de conceptos | Conocimiento | Diez preguntas tipo Saber Pro con retroalimentación inmediata. |
 
-## 7. Rúbrica sugerida
+## 8. Rúbrica sugerida
 
 | Criterio | Peso | Superior (4,6 a 5,0) | Alto (4,0 a 4,5) | Básico (3,0 a 3,9) | Bajo (0,0 a 2,9) |
 |---|---|---|---|---|---|
@@ -68,7 +114,7 @@ Para sesiones de 90 minutos use 6 meses y deje la reflexión como trabajo indepe
 | Evaluación de conceptos | 20 % | 9 o 10 correctas. | 7 u 8 correctas. | 5 o 6 correctas. | 4 o menos. |
 | Participación en plenaria | 10 % | Explica una decisión con el indicador que la justificó y propone una mejora. | Explica una decisión con datos. | Describe lo que hizo sin justificarlo. | No participa. |
 
-## 8. Cómo se calcula la nota del simulador
+## 9. Cómo se calcula la nota del simulador
 
 Cada mes se calcula un puntaje de 0 a 100 con un cuadro de mando integral:
 
@@ -78,14 +124,14 @@ Cada mes se calcula un puntaje de 0 a 100 con un cuadro de mando integral:
 
 La nota final es el promedio mensual dividido entre 20 (escala de 0,0 a 5,0).
 
-## 9. Audio en el aula
+## 10. Audio en el aula
 
 - Funciona mejor en Chrome, Edge y Safari actualizados. Firefox en Linux puede no tener voces en español.
 - Si no hay voces en español, instale una voz en la configuración del sistema operativo (Windows: Configuración → Hora e idioma → Voz).
 - En el botón "Audio" se elige la voz, la velocidad y el volumen, y se activa o desactiva la lectura automática de resultados.
 - Si el audio falla, el simulador sigue funcionando y todo el contenido está en pantalla.
 
-## 10. Preguntas orientadoras para la plenaria
+## 11. Preguntas orientadoras para la plenaria
 
 1. ¿Qué estudiante tuvo menos quiebres de inventario y cómo calculó sus compras?
 2. ¿Quién tuvo el mejor ROAS y por qué no siempre conviene aumentar el presupuesto de pauta?

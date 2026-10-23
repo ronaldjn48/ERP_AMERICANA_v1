@@ -52,7 +52,7 @@ export function GameScreen({ profile, config, state, draft, tab, onTab, onDraft,
   };
 
   return (
-    <main className="container game" id="contenido">
+    <div className="container game" id="contenido">
       <div className="sr-only" aria-live="polite">
         {announce}
       </div>
@@ -149,6 +149,6 @@ export function GameScreen({ profile, config, state, draft, tab, onTab, onDraft,
           onConfirm={onExit}
         />
       </div>
-    </main>
+    </div>
   );
 }

@@ -35,7 +35,7 @@ export function Briefing({
     'Tu nota final sale de un cuadro de mando que equilibra finanzas, clientes y procesos. Mucho éxito.';
 
   return (
-    <main className="container briefing" id="contenido">
+    <div className="container briefing" id="contenido">
       <p className="eyebrow">Sesión informativa</p>
       <h1>{s.company}</h1>
       <p className="lead">{s.description}</p>
@@ -144,6 +144,6 @@ export function Briefing({
           Ir al primer mes
         </button>
       </div>
-    </main>
+    </div>
   );
 }

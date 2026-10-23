@@ -57,14 +57,14 @@ export function SetupScreen({ initialConfig, initialProfile, assigned, save, onS
   };
 
   return (
-    <main className="container setup" id="contenido">
+    <div className="container setup" id="contenido">
       <section className="hero">
         <div>
-          <p className="eyebrow">Simulador educativo de decisiones gerenciales</p>
-          <h1>ERP Americana</h1>
+          <p className="eyebrow">Nivel estratégico · decisiones mensuales</p>
+          <h1>Simulador gerencial</h1>
           <p className="lead">
-            Dirige una empresa que integra ERP, CRM, comercio electrónico y automatización de procesos. Decide cada mes, observa
-            los indicadores y aprende de las consecuencias.
+            Mientras el ERP te entrena en la operación diaria, el simulador resume la empresa en decisiones mensuales de precio, compras,
+            servicio, pauta, automatización y crédito. Decide, observa los indicadores y aprende de las consecuencias.
           </p>
           <SpeakButton text={INTRO} id="intro" label="Escuchar introducción" />
         </div>
@@ -276,6 +276,6 @@ export function SetupScreen({ initialConfig, initialProfile, assigned, save, onS
           </button>
         </div>
       </form>
-    </main>
+    </div>
   );
 }
