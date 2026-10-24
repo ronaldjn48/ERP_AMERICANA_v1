@@ -51,6 +51,8 @@ describe('espacio de trabajo', () => {
 describe('ciclo de venta', () => {
   it('cotización → confirmado → despachado → facturado → pagado con asientos correctos', () => {
     let s = ws();
+    const openingAr = balanceOf(s.journal, '1305');
+    expect(openingAr).toBeGreaterThan(0);
     s = createSalesOrder(s, { customerId: 'cli1', lines: [{ productId: 'prd1', qty: 5, price: 89000, discount: 0.05 }] });
     const id = last(s.salesOrders).id;
     s = confirmSalesOrder(s, id);
@@ -63,10 +65,10 @@ describe('ciclo de venta', () => {
     const o = s.salesOrders.find((x) => x.id === id)!;
     const { subtotal, iva, total } = orderTotals(o.lines, 0.19);
     expect(iva).toBe(Math.round(subtotal * 0.19));
-    expect(balanceOf(s.journal, '1305')).toBe(total);
+    expect(balanceOf(s.journal, '1305')).toBe(openingAr + total);
     expect(balanceOf(s.journal, '4135')).toBe(subtotal);
     s = registerPayment(s, id);
-    expect(balanceOf(s.journal, '1305')).toBe(0);
+    expect(balanceOf(s.journal, '1305')).toBe(openingAr);
     expect(s.stats.pedido_pagado).toBe(1);
     assertBooks(s);
   });

@@ -1947,3 +1947,137 @@ body.dock-open .erp-main {
 body.dock-closed .erp-main {
   padding-bottom: 6rem;
 }
+
+/* Regla de decisión de cada misión */
+.takeaway {
+  background: var(--info-soft);
+  border-left: 4px solid var(--info);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+.takeaway strong {
+  color: var(--info);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.takeaway p {
+  margin: 0.2rem 0 0;
+}
+
+/* Indicadores para decidir */
+.reco {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  margin-bottom: 0.75rem;
+  background: var(--warn-soft);
+  border-left: 4px solid var(--warn);
+}
+.reco-critico {
+  background: var(--bad-soft);
+  border-left-color: var(--bad);
+}
+.reco > svg {
+  flex: none;
+  color: var(--warn);
+}
+.reco-critico > svg {
+  color: var(--bad);
+}
+.reco > div {
+  flex: 1;
+  min-width: 0;
+}
+.reco p {
+  margin: 0.15rem 0 0;
+  font-size: 0.9rem;
+}
+@media (max-width: 560px) {
+  .reco {
+    flex-wrap: wrap;
+  }
+}
+.indicators {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.indicator {
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+  display: grid;
+  gap: 0.15rem;
+  align-content: start;
+  min-width: 0;
+}
+.indicator header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  align-items: flex-start;
+}
+.ind-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+.ind-value {
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.indicator details summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: var(--info);
+  margin-top: 0.2rem;
+}
+.indicator details p {
+  margin: 0.35rem 0 0;
+}
+.ind-bien {
+  border-top-color: var(--good);
+}
+.ind-atencion {
+  border-top-color: var(--warn);
+}
+.ind-critico {
+  border-top-color: var(--bad);
+}
+.ind-chip-bien {
+  background: var(--good-soft);
+  color: var(--good);
+}
+.ind-chip-atencion {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.ind-chip-critico {
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+.ind-chip-sin-datos {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.impact {
+  background: var(--surface-2);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.4rem;
+}
+.impact h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.impact p {
+  margin: 0;
+}

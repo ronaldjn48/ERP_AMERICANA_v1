@@ -44,6 +44,8 @@ El estudiante crea su espacio de trabajo con nombre, grupo, empresa y actividad 
 
 Niveles por experiencia: Practicante (0 XP), Auxiliar administrativo (300), Analista de operaciones (800), Coordinador(a) de área (1.500), Jefe(a) de operaciones (2.300) y Gerente general (3.200). Acertar una pregunta de cálculo al primer intento suma 20 XP. Hay 10 insignias: una por cada módulo completo y tres especiales.
 
+Al completar una misión, el estudiante recibe una regla de decisión (por ejemplo: "Mantén una campaña solo si su ROAS supera el de equilibrio"). En Inicio, el tablero **Indicadores para decidir** compara la operación con metas y recomienda la acción más urgente del día. Úselo en plenaria: pida a cada estudiante que explique qué indicador estaba en rojo y qué decisión tomó.
+
 Varias misiones tienen preguntas de verificación con datos de la propia empresa (por ejemplo, el IVA de la última factura o el saldo de bancos). Como cada estudiante tiene datos distintos, la respuesta no se puede copiar.
 
 ### Secuencia sugerida en cuatro sesiones
@@ -57,6 +59,7 @@ Varias misiones tienen preguntas de verificación con datos de la propia empresa
 
 ### Evidencias de la práctica en el ERP
 
+- Informe de la bitácora de aprendizaje (Centro de misiones → Copiar informe para entregar): incluye nivel, XP, misiones con su regla de decisión, los ocho indicadores al cierre y las cuatro respuestas de reflexión. El estudiante lo pega en el aula virtual.
 - Captura del Centro de misiones con nivel, XP e insignias.
 - Respaldo de la práctica (Configuración → Copiar respaldo), que el docente puede restaurar en su navegador para revisar los registros.
 - Estado de resultados y balance general del módulo de Contabilidad.

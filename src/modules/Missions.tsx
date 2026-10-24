@@ -3,6 +3,8 @@ import { sfx } from '../audio';
 import { SpeakButton } from '../components/ui';
 import { MODULE_LABEL } from '../erp/meta';
 import { BADGES, LEVELS, MISSIONS, TOTAL_XP, answerQuestion, levelOf, missionProgress, missionStatus, objectiveDone, setActiveMission, type Mission, type QuestionObjective } from '../erp/missions';
+import { copyText } from '../export';
+import { decisionIndicators } from '../erp/insights';
 import { missionContext, navigate, replaceWorkspace, run, toast, useRoute } from '../erp/store';
 import type { ErpState } from '../erp/types';
 import { Icon } from '../ui/icons';
@@ -77,7 +79,83 @@ export function MissionsModule({ s }: { s: ErpState }) {
         </nav>
         <MissionDetail s={s} m={m} />
       </div>
+      <Journal s={s} />
     </div>
+  );
+}
+
+const JOURNAL_PROMPTS = [
+  '¿Qué decisión tomaste en el ERP que más mejoró un indicador? Nombra el indicador y su valor antes y después.',
+  '¿Qué error o faltante tuviste y qué hiciste para corregirlo (compra, cobro, ajuste o automatización)?',
+  '¿Cómo se conectan las áreas de la empresa? Explica cómo una venta afectó el inventario, la cartera y la contabilidad.',
+  '¿Qué regla de decisión aplicarías en una empresa real de tu región y por qué?',
+];
+
+/** Bitácora de aprendizaje: reflexión escrita y un informe para entregar en el aula virtual. */
+function Journal({ s }: { s: ErpState }) {
+  const [answers, setAnswers] = useState<string[]>(s.reflections ?? []);
+  const saved = JSON.stringify(answers) === JSON.stringify(s.reflections ?? []);
+  const lvl = levelOf(s.gamification.xp);
+  const report = () => {
+    const indicators = decisionIndicators(s);
+    return [
+      `Bitácora de aprendizaje · ERP Americana`,
+      `Estudiante: ${s.profile.name}${s.profile.group ? ` · ${s.profile.group}` : ''}`,
+      `Empresa: ${s.settings.companyName} · día ${s.day} de operación`,
+      `Nivel: ${lvl.name} · ${s.gamification.xp} XP · ${Object.keys(s.gamification.completed).length} de ${MISSIONS.length} misiones · ${s.gamification.badges.length} insignias`,
+      '',
+      'Misiones completadas y reglas de decisión:',
+      ...MISSIONS.filter((x) => s.gamification.completed[x.id] !== undefined).map((x) => `- ${x.title} (día ${s.gamification.completed[x.id]}): ${x.takeaway}`),
+      '',
+      'Indicadores al cierre:',
+      ...indicators.map((i) => `- ${i.label}: ${i.value} (${i.target}) · ${i.status === 'bien' ? 'en meta' : i.status === 'atencion' ? 'atención' : i.status === 'critico' ? 'crítico' : 'sin datos'}`),
+      '',
+      'Reflexión:',
+      ...JOURNAL_PROMPTS.map((p, i) => `${i + 1}. ${p}\n${(answers[i] ?? '').trim() || '(sin respuesta)'}`),
+    ].join('\n');
+  };
+  return (
+    <section className="panel journal-panel" aria-labelledby="journal-title">
+      <header className="panel-head">
+        <h2 id="journal-title">Bitácora de aprendizaje</h2>
+        <SpeakButton text={`Bitácora de aprendizaje. Responde con datos de tu práctica. ${JOURNAL_PROMPTS.join(' ')}`} id="bitacora" />
+      </header>
+      <p className="muted">Escribe con datos de tu empresa: valores de los indicadores, números de pedidos, facturas u órdenes. Tus respuestas se guardan en este navegador y se incluyen en el informe.</p>
+      {JOURNAL_PROMPTS.map((p, i) => (
+        <div key={p} className="ff">
+          <label htmlFor={`bit-${i}`}>
+            {i + 1}. {p}
+          </label>
+          <textarea
+            id={`bit-${i}`}
+            rows={3}
+            maxLength={1500}
+            value={answers[i] ?? ''}
+            onChange={(e) => {
+              const next = [...answers];
+              next[i] = e.target.value;
+              setAnswers(next);
+            }}
+          />
+        </div>
+      ))}
+      <div className="row wrap">
+        <button type="button" className="btn-secondary" disabled={saved} onClick={() => run((x) => ({ ...x, reflections: answers }), 'Bitácora guardada')}>
+          Guardar bitácora
+        </button>
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={async () => {
+            run((x) => ({ ...x, reflections: answers }));
+            const ok = await copyText(report());
+            toast(ok ? 'exito' : 'error', ok ? 'Informe copiado' : 'El navegador no permitió copiar', ok ? 'Pégalo en el aula virtual o en un documento para entregarlo.' : 'Selecciona el texto de tus respuestas y cópialo manualmente.');
+          }}
+        >
+          Copiar informe para entregar
+        </button>
+      </div>
+    </section>
   );
 }
 
@@ -99,7 +177,15 @@ function MissionDetail({ s, m }: { s: ErpState; m: Mission }) {
           Bloqueada. Completa primero: {m.requires.map((r) => MISSIONS.find((x) => x.id === r)?.title).join(' y ')}.
         </p>
       ) : null}
-      {st === 'completada' ? <p className="notice notice-ok">Completada el día {s.gamification.completed[m.id]}. Ganaste {m.xp} XP.</p> : null}
+      {st === 'completada' ? (
+        <>
+          <p className="notice notice-ok">Completada el día {s.gamification.completed[m.id]}. Ganaste {m.xp} XP.</p>
+          <div className="takeaway">
+            <strong>Regla de decisión</strong>
+            <p>{m.takeaway}</p>
+          </div>
+        </>
+      ) : null}
       <p>{m.briefing}</p>
       <div className="row wrap">
         <SpeakButton text={`${m.title}. ${m.briefing} Objetivos: ${m.objectives.map((o) => o.text).join('. ')}.`} id={`mision-${m.id}`} label="Escuchar misión" />

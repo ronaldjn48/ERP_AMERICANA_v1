@@ -298,6 +298,8 @@ export interface ErpState {
   /** Vistas visitadas (módulo/vista). */
   visited: Record<string, boolean>;
   gamification: Gamification;
+  /** Bitácora de aprendizaje del estudiante (respuestas de reflexión). */
+  reflections?: string[];
   /** Datos de la jornada anterior para el resumen del día. */
   lastDay: DaySummary | null;
 }

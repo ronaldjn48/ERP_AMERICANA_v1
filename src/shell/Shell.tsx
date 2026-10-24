@@ -350,6 +350,10 @@ function Celebration() {
         <p className="eyebrow">Misión completada</p>
         <h2 id="cel-title">{c.title}</h2>
         <p className="celebrate-xp">+{c.xp} XP</p>
+        <div className="takeaway">
+          <strong>Regla de decisión</strong>
+          <p>{c.takeaway}</p>
+        </div>
         {c.badges.length ? <p>Nueva insignia: <strong>{c.badges.join(', ')}</strong></p> : null}
         {c.level ? <p className="notice notice-ok">Subiste de nivel: ahora eres <strong>{c.level}</strong>.</p> : null}
         <div className="row wrap center">

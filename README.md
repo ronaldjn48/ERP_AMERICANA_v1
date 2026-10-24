@@ -8,15 +8,15 @@ Funciona en el navegador, sin servidor, sin claves de API y sin conexión despu�
 
 | Módulo | Qué puede hacer el estudiante |
 |---|---|
-| Inicio | Indicadores del mes (ventas, utilidad, bancos, cartera, inventario), tareas pendientes con acceso directo, misión activa, gráficas diarias y actividad reciente. |
+| Inicio | Indicadores del mes, **Indicadores para decidir** (8 indicadores con meta, estado, significado y decisión recomendada, más la recomendación del día), tareas pendientes con acceso directo, misión activa, gráficas diarias y actividad reciente. |
 | CRM | Crear, editar e inactivar clientes con validación de NIT o cédula, cupo y plazo. Embudo de oportunidades en tablero kanban con pronóstico ponderado. Casos de servicio con prioridad, toma y solución. |
-| Ventas | Cotizaciones editables con margen en tiempo real, confirmación con control de cupo de crédito, despacho, factura electrónica con IVA, cobro, recordatorios y anulación. Vista de pasos y asientos generados por cada pedido. |
-| Comercio electrónico | Publicar y retirar productos del catálogo, cambiar precios, campañas en Meta Ads y TikTok Ads con gasto, clics, pedidos, ventas y ROAS. |
+| Ventas | Cotizaciones editables con margen en tiempo real, confirmación con control de cupo de crédito, despacho, factura electrónica con IVA, cobro, recordatorios y anulación. Vista de pasos y asientos generados por cada pedido. Si falta inventario, el pedido explica la consecuencia y crea la orden de compra por el faltante. |
+| Comercio electrónico | Publicar y retirar productos del catálogo, cambiar precios con un simulador de impacto (pedidos esperados, utilidad bruta y precio que la maximiza según la elasticidad), campañas en Meta Ads y TikTok Ads con gasto, clics, pedidos, ventas y ROAS. |
 | Inventario | Productos con stock, reservado, disponible, costo promedio, margen, punto de reorden y cantidad de reposición. Kardex valorizado y ajustes por conteo físico. |
 | Compras | Órdenes de compra (borrador, aprobada, recibida, pagada) con tiempo de entrega del proveedor, sugerencia de compra por punto de reorden y maestro de proveedores. |
 | Contabilidad | Libro diario, asientos manuales con validación de partida doble, balance de prueba, estado de resultados, balance general, cartera por antigüedad, cuentas por pagar y plan de cuentas basado en el PUC. |
 | Automatización | Siete reglas cuando–entonces configurables (reabastecimiento, despacho, facturación web, cobro, escalamiento de casos, correo de confirmación y pausa de campañas) con registro de ejecución. |
-| Centro de misiones | 20 misiones con objetivos verificados en los datos, preguntas de cálculo, 3.420 XP, 6 niveles y 10 insignias. Panel flotante con la misión activa y botón "Ir" al módulo. |
+| Centro de misiones | 20 misiones con objetivos verificados en los datos, preguntas de cálculo, 3.420 XP, 6 niveles y 10 insignias. Cada misión entrega una regla de decisión. Bitácora de aprendizaje con cuatro preguntas de reflexión y un informe para copiar y entregar. Panel flotante con la misión activa y botón "Ir" al módulo. |
 | Simulador gerencial | El simulador de decisiones mensuales de la versión anterior, con su informe, evaluación tipo Saber Pro y evidencias. |
 | Aprendizaje | Resultados de aprendizaje, procesos integrados (order to cash, procure to pay, comercio electrónico) y glosario. |
 | Configuración | Datos de la empresa, IVA, plazos, límite de aprobación de compras, actividad del mercado, módulos visibles, perfil, respaldo y reinicio. |

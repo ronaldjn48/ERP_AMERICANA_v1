@@ -103,7 +103,40 @@ Lo que se conservó sin cambios de lógica: el motor del simulador gerencial, su
 | Diseño adaptable | 108 vistas (18 vistas × 6 anchos de 320 a 1440 px): 0 px de desplazamiento horizontal en las dos versiones. |
 | Carga de trabajo diaria | Con actividad normal: unas 2,3 ventas web, 0,3 cotizaciones, 0,5 oportunidades y 0,6 casos por día; cada cierre de día tarda unos 5 ms; un mes de operación ocupa cerca de 100 KB de almacenamiento. |
 
-## 7. Recomendaciones pendientes
+## 7. Cuarta revisión: prueba como estudiante
+
+Se automatizó un recorrido de estudiante real que completa las 20 misiones usando solo la interfaz. Las respuestas a las preguntas se leen de la pantalla (balance de prueba, estados financieros, ficha del pedido), como lo haría un estudiante. Además, un barrido pulsa todos los botones visibles de cada vista de cada módulo.
+
+### Resultados
+
+| Prueba | Resultado |
+|---|---|
+| Recorrido de estudiante | 20 de 20 misiones en 32 días de operación, 3.580 XP, nivel Gerente general, 10 insignias, nota 4,4 en el simulador gerencial (modo guiado), sin errores de página. |
+| Barrido de interacción | 229 clics en 26 vistas de los 12 módulos, incluidos los paneles de registro: sin errores. |
+| Diseño adaptable | 108 vistas en 6 anchos (320 a 1440 px): 0 px de desplazamiento horizontal. |
+| Pruebas automatizadas | 54 de 54. |
+
+### Defectos encontrados y corregidos
+
+| Defecto | Efecto en el estudiante | Corrección |
+|---|---|---|
+| El panel lateral movía el foco al primer campo 30 ms después de abrirse. | Si el estudiante ya escribía en otro campo, el texto terminaba en "Descripción" (se vio en el asiento manual). | El foco inicial solo se aplica si el usuario aún no está dentro del panel. |
+| Los clientes pagaban solos casi siempre al vencer la factura. | La misión "Cartera al día" dependía de la suerte y enseñaba que cobrar no requiere gestión. | Sin recordatorio, una factura vencida se paga despacio; cada recordatorio aumenta la probabilidad. Se agregó cartera heredada que vence los días 3 y 5. |
+| Un pago logrado después de un recordatorio no contaba como cobro. | El estudiante gestionaba bien y la misión no avanzaba. | Cuenta como cobro gestionado. |
+| Los pedidos sin inventario solo mostraban un error. | El estudiante no sabía cómo resolverlo. | La ficha del pedido explica la consecuencia y crea la orden de compra por el faltante. |
+| Las facturas heredadas mostraban "día −27". | Confusión. | Se muestran como "Apertura". |
+| "Utilidad del mes" aparecía en rojo al inicio de cada mes. | Podía interpretarse como una mala decisión. | Aclara que los gastos fijos se registran el primer día del mes. |
+
+### Mejoras para aprender a decidir
+
+| Mejora | Qué aprende el estudiante |
+|---|---|
+| Indicadores para decidir (Inicio) | Relacionar datos con decisiones: cada indicador tiene meta, estado, significado y acción recomendada. La recomendación del día prioriza lo más urgente. |
+| Simulador de impacto del precio (Comercio electrónico) | Antes de cambiar un precio ve el efecto esperado en pedidos y utilidad bruta, y el precio que maximiza la utilidad según la elasticidad. |
+| Regla de decisión por misión | Cada logro deja un principio aplicable a una empresa real; se muestra y se narra al completar la misión. |
+| Bitácora de aprendizaje (Centro de misiones) | Metacognición: cuatro preguntas de reflexión con datos de su práctica e informe para entregar. |
+
+## 8. Recomendaciones pendientes
 
 1. Activar GitHub Pages (Settings → Pages → Source: GitHub Actions) para publicar el simulador.
 2. Si el código original de AI Studio existe, subirlo a una rama aparte para compararlo con esta versión antes de descartarlo.

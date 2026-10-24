@@ -29,8 +29,18 @@ export function PurchasingModule({ s }: { s: ErpState }) {
   const [creating, setCreating] = useState<PurchaseLine[] | null>(null);
   const [detail, setDetail] = useState<string | null>(route.id ?? null);
   useEffect(() => {
+    if (route.view === 'nueva' && route.id) {
+      // Orden sugerida desde un faltante de ventas: "producto:cantidad,producto:cantidad".
+      const lines = route.id
+        .split(',')
+        .map((x) => x.split(':'))
+        .map(([productId, qty]) => ({ productId, qty: Number(qty), cost: s.products.find((p) => p.id === productId)?.cost ?? 0 }))
+        .filter((l) => l.qty > 0 && s.products.some((p) => p.id === l.productId));
+      if (lines.length) setCreating(lines);
+      return;
+    }
     if (route.id) setDetail(route.id);
-  }, [route.id]);
+  }, [route.view, route.id]);
   const low = s.products.filter((p) => p.active && p.reorderPoint > 0 && available(p) <= p.reorderPoint && !s.purchaseOrders.some((po) => (po.status === 'borrador' || po.status === 'aprobada') && po.lines.some((l) => l.productId === p.id)));
   const sname = (id: string) => s.suppliers.find((x) => x.id === id)?.name ?? '';
   const current = detail && view === 'ordenes' ? s.purchaseOrders.find((x) => x.id === detail) : null;

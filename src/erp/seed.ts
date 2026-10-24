@@ -1,5 +1,5 @@
 import { getScenario } from '../engine/scenarios';
-import type { AutomationRule, Customer, ErpState, ModuleKey, Product, Profile, Settings, Supplier } from './types';
+import type { AutomationRule, Customer, ErpState, ModuleKey, Product, Profile, SalesOrder, Settings, Supplier } from './types';
 
 interface ProductSeed {
   sku: string;
@@ -161,6 +161,34 @@ export function createWorkspace(profile: Profile, scenarioId: string, seed: numb
   }));
   const inventoryValue = products.reduce((a, p) => a + p.stock * p.cost, 0);
   const cash = 40000000;
+  // Cartera heredada: dos facturas a crédito emitidas antes de la apertura que vencen en los primeros días.
+  const legacy: SalesOrder[] = [
+    { customer: 'cli1', invoiceDay: -27, dueDay: 3, lines: [{ productId: products[0].id, qty: 12, price: products[0].price, discount: 0.05 }] },
+    { customer: 'cli3', invoiceDay: -40, dueDay: 5, lines: [{ productId: products[3].id, qty: 25, price: products[3].price, discount: 0.05 }, { productId: products[1].id, qty: 8, price: products[1].price, discount: 0.05 }] },
+  ].map((x, i) => ({
+    id: `so${i + 1}`,
+    number: `PV-${pad(i + 1)}`,
+    customerId: x.customer,
+    channel: 'directo',
+    day: x.invoiceDay,
+    lines: x.lines,
+    status: 'facturado',
+    origin: 'sistema',
+    invoiceNumber: `FE-${pad(i + 1)}`,
+    invoiceDay: x.invoiceDay,
+    dueDay: x.dueDay,
+    paidDay: null,
+    dispatchDay: x.invoiceDay,
+    costOfSales: x.lines.reduce((a, l) => a + l.qty * (products.find((p) => p.id === l.productId)?.cost ?? 0), 0),
+    campaignId: null,
+    opportunityId: null,
+    reminders: 0,
+    notes: 'Factura emitida antes de la apertura del sistema (cartera heredada).',
+  }));
+  const receivables = legacy.reduce((a, o) => {
+    const sub = Math.round(o.lines.reduce((x, l) => x + l.qty * l.price * (1 - l.discount), 0));
+    return a + sub + Math.round(sub * 0.19);
+  }, 0);
   const state: ErpState = {
     version: 1,
     scenarioId: scenario.id,
@@ -173,7 +201,7 @@ export function createWorkspace(profile: Profile, scenarioId: string, seed: numb
     products,
     customers,
     suppliers,
-    salesOrders: [],
+    salesOrders: legacy,
     purchaseOrders: [],
     opportunities: [
       { id: 'opo1', name: 'Dotación de fin de año', customerId: 'cli2', contactName: 'Gerencia de bienestar', value: 6500000, stage: 'calificado', source: 'referido', createdDay: 0, closedDay: null, salesOrderId: null, origin: 'sistema', notes: 'Requiere entrega antes del 15 de diciembre.' },
@@ -205,8 +233,9 @@ export function createWorkspace(profile: Profile, scenarioId: string, seed: numb
         manual: false,
         lines: [
           { account: '1110', debit: cash, credit: 0 },
+          { account: '1305', debit: receivables, credit: 0 },
           { account: '1435', debit: inventoryValue, credit: 0 },
-          { account: '3105', debit: 0, credit: cash + inventoryValue },
+          { account: '3105', debit: 0, credit: cash + inventoryValue + receivables },
         ],
       },
     ],
@@ -228,6 +257,9 @@ export function createWorkspace(profile: Profile, scenarioId: string, seed: numb
       CL: customers.length,
       cli: customers.length,
       PR: suppliers.length,
+      PV: legacy.length,
+      so: legacy.length,
+      FE: legacy.length,
       sup: suppliers.length,
       prd: products.length,
       CS: 2,

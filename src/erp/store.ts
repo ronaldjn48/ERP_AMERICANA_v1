@@ -75,7 +75,7 @@ export const erpStore = new Store<ErpState | null>(typeof window === 'undefined'
 export const routeStore = new Store<Route>(typeof window === 'undefined' ? { module: 'inicio' } : loadRoute());
 export const toastStore = new Store<Toast[]>([]);
 /** Misión recién completada para mostrar la celebración. */
-export const celebrationStore = new Store<{ title: string; xp: number; badges: string[]; level: string | null } | null>(null);
+export const celebrationStore = new Store<{ title: string; xp: number; badges: string[]; level: string | null; takeaway: string } | null>(null);
 
 export const useErp = () => useSyncExternalStore(erpStore.subscribe, erpStore.get, erpStore.get);
 export const useRoute = () => useSyncExternalStore(routeStore.subscribe, routeStore.get, routeStore.get);
@@ -108,9 +108,9 @@ function commit(next: ErpState) {
     const m = events.completed[events.completed.length - 1];
     const xp = events.completed.reduce((a, x) => a + x.xp, 0);
     sfx.play('finish');
-    celebrationStore.set({ title: m.title, xp, badges: events.badges.map((b) => b.name), level: events.levelUp });
+    celebrationStore.set({ title: m.title, xp, badges: events.badges.map((b) => b.name), level: events.levelUp, takeaway: m.takeaway });
     if (loadAudioPrefs().autoNarrate) {
-      let text = `Misión completada: ${m.title}. Ganaste ${xp} puntos de experiencia.`;
+      let text = `Misión completada: ${m.title}. Ganaste ${xp} puntos de experiencia. Regla de decisión: ${m.takeaway}`;
       if (events.badges.length) text += ` Nueva insignia: ${events.badges.map((b) => b.name).join(', ')}.`;
       if (events.levelUp) text += ` Subiste de nivel. Ahora eres ${events.levelUp}.`;
       narrator.speak(text, `mision-${m.id}`);

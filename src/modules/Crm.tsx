@@ -148,7 +148,7 @@ function CustomerDetail({ s, c }: { s: ErpState; c: Customer }) {
               <button type="button" className="link" onClick={() => navigate({ module: 'ventas', id: o.id })}>
                 {o.number}
               </button>
-              <span>Día {o.day}</span>
+              <span>{o.day < 1 ? 'Apertura' : `Día ${o.day}`}</span>
               <Chip status={o.status} />
               <span className="num">{cop(orderTotals(o.lines, s.settings.ivaRate).total)}</span>
             </li>

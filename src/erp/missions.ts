@@ -37,6 +37,8 @@ export interface Mission {
   objectives: Objective[];
   xp: number;
   requires: string[];
+  /** Regla de decisión que el estudiante se lleva al completar la misión. */
+  takeaway: string;
 }
 
 export interface MissionContext {
@@ -57,6 +59,7 @@ function lastUserInvoiceIva(s: ErpState): number {
 export const MISSIONS: Mission[] = [
   {
     id: 'm01',
+    takeaway: 'Antes de operar, verifica que los datos maestros estén completos: un NIT o una dirección errados se repiten en cada factura y en cada informe.',
     module: 'inicio',
     title: 'Primer día en la empresa',
     concept: 'Datos maestros y navegación del ERP',
@@ -72,6 +75,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm02',
+    takeaway: 'Asigna cupo de crédito según la capacidad de pago del cliente: un cupo alto vende más, pero aumenta el riesgo de cartera.',
     module: 'crm',
     title: 'Registra un cliente corporativo',
     concept: 'Maestro de clientes en el CRM',
@@ -86,6 +90,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm03',
+    takeaway: 'Mide el embudo por etapas: el pronóstico ponderado (valor × probabilidad) es más realista que sumar todas las oportunidades.',
     module: 'crm',
     title: 'Gestiona el embudo comercial',
     concept: 'Etapas del embudo y conversión a venta',
@@ -101,6 +106,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm04',
+    takeaway: 'Atiende primero los casos de prioridad alta y responde en menos de dos días: la demora convierte una duda en un reclamo.',
     module: 'crm',
     title: 'Servicio al cliente',
     concept: 'Gestión de casos y tiempos de respuesta',
@@ -116,6 +122,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm05',
+    takeaway: 'Una venta solo termina cuando se cobra: vigila el ciclo completo, no solo el pedido.',
     module: 'ventas',
     title: 'Ciclo completo de venta',
     concept: 'Del pedido al recaudo (order to cash)',
@@ -133,6 +140,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm06',
+    takeaway: 'Antes de dar un descuento, calcula el margen que queda: un descuento de 10 % puede consumir la cuarta parte de la utilidad bruta.',
     module: 'ventas',
     title: 'Descuento sin perder margen',
     concept: 'Margen bruto y política de descuentos',
@@ -146,6 +154,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm07',
+    takeaway: 'Concilia el inventario físico con el sistema con frecuencia: cada faltante es un gasto y una venta que ya no podrás hacer.',
     module: 'inventario',
     title: 'Kardex y conteo físico',
     concept: 'Kardex valorizado a costo promedio',
@@ -161,6 +170,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm08',
+    takeaway: 'Pide a tiempo: punto de reorden = demanda diaria × días de entrega + stock de seguridad.',
     module: 'inventario',
     title: 'Punto de reorden',
     concept: 'Punto de reorden = demanda diaria × tiempo de entrega + stock de seguridad',
@@ -175,6 +185,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm09',
+    takeaway: 'Elige proveedores por costo, tiempo de entrega y plazo de pago, no solo por precio.',
     module: 'compras',
     title: 'Registra un proveedor',
     concept: 'Maestro de proveedores',
@@ -186,6 +197,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm10',
+    takeaway: 'Paga a los proveedores dentro del plazo pactado, pero no antes de cobrar tu cartera: así cuidas la caja sin dañar la relación.',
     module: 'compras',
     title: 'Ciclo completo de compra',
     concept: 'De la orden al pago (procure to pay)',
@@ -203,6 +215,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm11',
+    takeaway: 'Publica solo productos con margen y stock: un producto agotado en la tienda genera reclamos, no ventas.',
     module: 'ecommerce',
     title: 'Publica tu catálogo',
     concept: 'Catálogo digital y precio mínimo de venta',
@@ -217,6 +230,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm12',
+    takeaway: 'En el comercio electrónico la velocidad es parte del producto: despacha y factura el mismo día.',
     module: 'ecommerce',
     title: 'Atiende los pedidos web',
     concept: 'Cumplimiento de pedidos en línea',
@@ -228,6 +242,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm13',
+    takeaway: 'Mantén una campaña solo si su ROAS supera el de equilibrio (1 ÷ margen de contribución); si no, ajusta o pausa.',
     module: 'ecommerce',
     title: 'Campaña rentable',
     concept: 'ROAS y ROAS de equilibrio',
@@ -244,6 +259,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm14',
+    takeaway: 'Todo hecho económico tiene dos caras: si los débitos no igualan a los créditos, hay un error que corregir antes de decidir.',
     module: 'contabilidad',
     title: 'Partida doble',
     concept: 'Libro diario y balance de prueba',
@@ -259,20 +275,22 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm15',
+    takeaway: 'La cartera vencida es caja que no tienes: haz seguimiento desde el primer día de vencimiento.',
     module: 'contabilidad',
     title: 'Cartera al día',
     concept: 'Gestión de cuentas por cobrar',
     briefing:
-      'Vender a crédito exige cobrar. La cartera vencida inmoviliza la caja de la empresa. Envía recordatorios a clientes con facturas vencidas y registra el pago de al menos una factura vencida. Cierra días para que las facturas venzan.',
+      'Vender a crédito exige cobrar. La cartera vencida inmoviliza la caja de la empresa. La empresa heredó facturas a crédito que vencen en los primeros días. Cuando una factura vence, envía recordatorios al cliente y logra su pago. Un recordatorio oportuno aumenta la probabilidad de que el cliente pague.',
     xp: 150,
     requires: ['m05'],
     objectives: [
       { id: 'o1', kind: 'check', text: 'Envía 2 recordatorios de cobro', check: (s) => st(s, 'recordatorio_enviado') >= 2, go: { module: 'contabilidad', view: 'cartera' } },
-      { id: 'o2', kind: 'check', text: 'Cobra una factura vencida', check: (s) => st(s, 'cartera_vencida_cobrada') >= 1, go: { module: 'contabilidad', view: 'cartera' } },
+      { id: 'o2', kind: 'check', text: 'Logra el pago de una factura vencida: regístralo cuando el cliente pague o espera su pago después del recordatorio', check: (s) => st(s, 'cartera_vencida_cobrada') >= 1, go: { module: 'contabilidad', view: 'cartera' } },
     ],
   },
   {
     id: 'm16',
+    takeaway: 'Automatiza las tareas repetitivas y de bajo riesgo; reserva tu tiempo para las decisiones que requieren criterio.',
     module: 'automatizacion',
     title: 'Tu primer flujo automático',
     concept: 'Automatización de procesos repetitivos',
@@ -288,6 +306,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm17',
+    takeaway: 'Automatiza el abastecimiento con límites: aprueba solo hasta un monto y revisa las órdenes grandes.',
     module: 'automatizacion',
     title: 'Reabastecimiento inteligente',
     concept: 'Integración inventario–compras',
@@ -302,6 +321,7 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm18',
+    takeaway: 'Lee el estado de resultados cada mes: si los gastos fijos superan la utilidad bruta, debes vender más, subir el margen o reducir gastos.',
     module: 'contabilidad',
     title: 'Cierre del primer mes',
     concept: 'Estado de resultados',
@@ -317,17 +337,19 @@ export const MISSIONS: Mission[] = [
   },
   {
     id: 'm19',
+    takeaway: 'La disciplina diaria (despachar, resolver y reponer a tiempo) sostiene la satisfacción del cliente.',
     module: 'inicio',
     title: 'Racha operativa',
     concept: 'Disciplina operativa y nivel de servicio',
     briefing:
-      'Una operación sana no deja pedidos sin inventario ni casos de servicio atrasados. Logra cinco días seguidos sin quiebres de inventario y sin casos abiertos por más de dos días.',
+      'Una operación sana no deja pedidos sin inventario ni casos de servicio atrasados. Logra cinco días seguidos sin quiebres de inventario y sin casos abiertos por más de dos días. Consejo: antes de confirmar una cotización revisa el aviso de inventario y compra primero lo que falta; define puntos de reorden para los productos de la tienda y resuelve los casos cada día.',
     xp: 200,
     requires: ['m04', 'm05'],
     objectives: [{ id: 'o1', kind: 'check', text: 'Logra una racha de 5 días sin quiebres ni casos atrasados', check: (s) => st(s, 'mejor_racha') >= 5 }],
   },
   {
     id: 'm20',
+    takeaway: 'Las decisiones de un área afectan a todas: precio, inventario, servicio, pauta y caja se deciden juntos.',
     module: 'simulador',
     title: 'Reto gerencial',
     concept: 'Decisiones estratégicas integradas',

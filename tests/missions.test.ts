@@ -35,7 +35,7 @@ describe('misiones', () => {
   it('las preguntas validan la respuesta y dan bono al primer intento', () => {
     let s = ws();
     s = createSalesOrder(s, { customerId: 'cli1', lines: [{ productId: 'prd1', qty: 2, price: 89000, discount: 0 }] });
-    const id = s.salesOrders[0].id;
+    const id = s.salesOrders[s.salesOrders.length - 1].id;
     s = registerPayment(invoiceSalesOrder(dispatchSalesOrder(confirmSalesOrder(s, id), id), id), id);
     const wrong = answerQuestion(s, 'm05', 'o5', 1);
     expect(wrong.correct).toBe(false);

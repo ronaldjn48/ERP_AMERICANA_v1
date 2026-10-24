@@ -212,7 +212,8 @@ export function closeDay(s: ErpState): ErpState {
     // --- 7. Pagos de clientes a crédito.
     for (const o of d.salesOrders.filter((x) => x.status === 'facturado' && x.dueDay !== null)) {
       const overdue = d.day - (o.dueDay ?? d.day);
-      const p = overdue >= 0 ? 0.25 + 0.2 * o.reminders : 0.04;
+      // Sin gestión, el cliente con factura vencida paga despacio; cada recordatorio aumenta la probabilidad de pago.
+      const p = overdue < 0 ? 0.04 : overdue === 0 ? 0.15 : 0.1 + 0.3 * o.reminders;
       if (rng.next() < Math.min(0.9, p)) {
         const { total } = orderTotals(o.lines, d.settings.ivaRate);
         o.status = 'pagado';
@@ -223,6 +224,8 @@ export function closeDay(s: ErpState): ErpState {
         ]);
         summary.payments += 1;
         summary.paymentsValue += total;
+        // Un pago de factura vencida que llega después de un recordatorio es un cobro gestionado.
+        if (overdue > 0 && o.reminders > 0) d.stats.cartera_vencida_cobrada = (d.stats.cartera_vencida_cobrada ?? 0) + 1;
         addLog(d, 'ventas', 'exito', `El cliente pagó ${o.invoiceNumber} por ${cop(total)}.`, o.id);
       }
     }

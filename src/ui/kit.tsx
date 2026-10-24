@@ -326,7 +326,10 @@ export function Drawer({ open, title, subtitle, onClose, children, footer, wide 
   useEffect(() => {
     if (!open) return;
     const prev = document.activeElement as HTMLElement | null;
-    const t = window.setTimeout(() => ref.current?.querySelector<HTMLElement>('input, select, textarea, button:not(.drawer-close)')?.focus(), 30);
+    // Foco inicial en el primer campo, solo si el usuario aún no está trabajando dentro del panel.
+    const t = window.setTimeout(() => {
+      if (ref.current && !ref.current.contains(document.activeElement)) ref.current.querySelector<HTMLElement>('input, select, textarea, button:not(.drawer-close)')?.focus();
+    }, 30);
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onCloseRef.current();
       if (e.key === 'Tab' && ref.current) {

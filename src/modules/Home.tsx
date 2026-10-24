@@ -2,6 +2,7 @@ import { LineChart } from '../components/Charts';
 import { SpeakButton } from '../components/ui';
 import { cop, millions, num } from '../engine/format';
 import { balanceOf, incomeStatement } from '../erp/accounts';
+import { decisionIndicators, topRecommendation, type IndicatorStatus } from '../erp/insights';
 import { MODULE_LABEL } from '../erp/meta';
 import { MISSIONS, levelOf, missionProgress } from '../erp/missions';
 import { available, orderTotals } from '../erp/ops';
@@ -70,12 +71,14 @@ export function Home({ s }: { s: ErpState }) {
 
       <div className="kpi-grid">
         <Kpi label="Ventas del mes" value={millions(isMonth.revenue)} sub={`Acumulado ${millions(isAll.revenue)}`} onClick={() => navigate({ module: 'contabilidad', view: 'estados' })} />
-        <Kpi label="Utilidad del mes" value={millions(isMonth.operatingProfit)} tone={isMonth.operatingProfit < 0 ? 'bad' : 'good'} sub="Antes de impuestos" onClick={() => navigate({ module: 'contabilidad', view: 'estados' })} />
+        <Kpi label="Utilidad del mes" value={millions(isMonth.operatingProfit)} tone={isMonth.operatingProfit < 0 ? 'bad' : 'good'} sub={`Desde el día ${month0}; los gastos fijos se registran el primer día`} onClick={() => navigate({ module: 'contabilidad', view: 'estados' })} />
         <Kpi label="Bancos" value={millions(cash)} tone={cash < 0 ? 'bad' : undefined} sub="Cuenta 1110" onClick={() => navigate({ module: 'contabilidad', view: 'balance' })} />
         <Kpi label="Cartera" value={millions(ar)} sub="Cuentas por cobrar" onClick={() => navigate({ module: 'contabilidad', view: 'cartera' })} />
         <Kpi label="Inventario" value={millions(inv)} sub={`${num(s.products.reduce((a, p) => a + p.stock, 0))} unidades`} onClick={() => navigate({ module: 'inventario' })} />
         <Kpi label="Misiones" value={`${done}/${MISSIONS.length}`} sub={`${s.gamification.xp} XP`} onClick={() => navigate({ module: 'misiones' })} />
       </div>
+
+      <DecisionBoard s={s} />
 
       <div className="grid-home">
         <Section title="Tareas pendientes">
@@ -157,5 +160,56 @@ export function Home({ s }: { s: ErpState }) {
         </ul>
       </Section>
     </div>
+  );
+}
+
+const STATUS_LABEL: Record<IndicatorStatus, string> = { bien: 'En meta', atencion: 'Atención', critico: 'Crítico', 'sin-datos': 'Sin datos' };
+
+/** Indicadores para decidir: meta, significado y acción recomendada. */
+function DecisionBoard({ s }: { s: ErpState }) {
+  const list = decisionIndicators(s);
+  const top = topRecommendation(s);
+  const speech =
+    (top ? `Recomendación del día: ${top.label}, ${top.value}. ${top.action} ` : 'Todos los indicadores están en meta. ') +
+    list.filter((i) => i.status === 'critico' || i.status === 'atencion').map((i) => `${i.label}: ${i.value}. ${STATUS_LABEL[i.status]}.`).join(' ');
+  return (
+    <Section title="Indicadores para decidir" actions={<SpeakButton text={speech} id={`decidir-${s.day}`} label="Escuchar análisis" />}>
+      {top ? (
+        <div className={`reco reco-${top.status}`}>
+          <Icon name="alert" size={20} />
+          <div>
+            <strong>Recomendación del día: {top.label.toLowerCase()}</strong>
+            <p>{top.action}</p>
+          </div>
+          <button type="button" className="btn-primary btn-sm" onClick={() => navigate(top.route)}>
+            Resolver
+          </button>
+        </div>
+      ) : (
+        <p className="notice notice-ok">Todos los indicadores están en meta. Cierra el día y sigue atento a los cambios.</p>
+      )}
+      <div className="indicators">
+        {list.map((i) => (
+          <article key={i.id} className={`indicator ind-${i.status}`}>
+            <header>
+              <span className="ind-label">{i.label}</span>
+              <span className={`chip ind-chip-${i.status}`}>{STATUS_LABEL[i.status]}</span>
+            </header>
+            <strong className="ind-value">{i.value}</strong>
+            <span className="muted small">{i.target}</span>
+            <details>
+              <summary>Qué significa y qué hacer</summary>
+              <p className="small">{i.meaning}</p>
+              <p className="small">
+                <strong>Decisión:</strong> {i.action}
+              </p>
+              <button type="button" className="btn-ghost btn-sm" onClick={() => navigate(i.route)}>
+                Ir <Icon name="arrowRight" size={14} />
+              </button>
+            </details>
+          </article>
+        ))}
+      </div>
+    </Section>
   );
 }

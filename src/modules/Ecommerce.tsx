@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { cop, dec, num, pct } from '../engine/format';
 import { GUIDES } from '../erp/meta';
 import { GATEWAY_FEE, available, saveCampaign, saveProduct, toggleCampaign, toggleWebPublish } from '../erp/ops';
+import { getScenario } from '../engine/scenarios';
 import { navigate, run, useRoute } from '../erp/store';
 import type { Campaign, ErpState, Product } from '../erp/types';
 import { Icon } from '../ui/icons';
@@ -104,7 +105,7 @@ function Catalog({ s }: { s: ErpState }) {
             Costo promedio {cop(priceEdit.p.cost)} · precio de referencia del mercado {cop(priceEdit.p.refPrice)} · margen con este precio{' '}
             <strong>{pct(1 - priceEdit.p.cost / Math.max(1, priceEdit.price))}</strong>.
           </p>
-          <p className="notice">La demanda de la tienda es elástica: un precio por encima del mercado reduce los pedidos; uno muy bajo reduce el margen.</p>
+          <PriceImpact s={s} p={priceEdit.p} price={priceEdit.price} />
         </Drawer>
       ) : null}
     </>
@@ -180,5 +181,44 @@ function Campaigns({ s }: { s: ErpState }) {
         </Drawer>
       ) : null}
     </>
+  );
+}
+
+/** Efecto esperado de un cambio de precio con elasticidad constante: demanda ∝ (precio de referencia ÷ precio)^e. */
+function PriceImpact({ s, p, price }: { s: ErpState; p: Product; price: number }) {
+  const e = getScenario(s.scenarioId).elasticity;
+  if (!(price > 0)) return null;
+  const demand = Math.pow(p.price / price, e);
+  const unitNow = p.price * (1 - GATEWAY_FEE) - p.cost;
+  const unitNew = price * (1 - GATEWAY_FEE) - p.cost;
+  const profit = unitNow > 0 ? (unitNew * demand) / unitNow : null;
+  const best = Math.round(((p.cost / (1 - GATEWAY_FEE)) * e) / (e - 1) / 1000) * 1000;
+  const fmt = (x: number) => `${x >= 0 ? '+' : ''}${pct(x, 0)}`;
+  return (
+    <div className="impact">
+      <h3>Efecto esperado del cambio</h3>
+      <p className="muted small">Elasticidad precio del mercado: {dec(e)}. Por cada 1 % que sube el precio, la demanda baja cerca de {dec(e)} %.</p>
+      <dl className="facts-grid">
+        <div>
+          <dt>Pedidos web esperados</dt>
+          <dd className={demand < 1 ? 'bad-text' : 'good-text'}>{price === p.price ? 'Sin cambio' : fmt(demand - 1)}</dd>
+        </div>
+        <div>
+          <dt>Margen por unidad (después de pasarela)</dt>
+          <dd className={unitNew <= 0 ? 'bad-text' : ''}>{cop(unitNew)}</dd>
+        </div>
+        <div>
+          <dt>Utilidad bruta esperada del producto</dt>
+          <dd className={profit !== null && profit < 1 ? 'bad-text' : 'good-text'}>{price === p.price ? 'Sin cambio' : profit === null ? '—' : fmt(profit - 1)}</dd>
+        </div>
+        <div>
+          <dt>Precio que maximiza la utilidad bruta</dt>
+          <dd>{e > 1 ? cop(best) : '—'}</dd>
+        </div>
+      </dl>
+      <p className="small muted">
+        Estimación del modelo: costo ÷ (1 − comisión) × e ÷ (e − 1). En la práctica también cuentan el precio de la competencia, la satisfacción del cliente y la pauta.
+      </p>
+    </div>
   );
 }

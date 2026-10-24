@@ -88,7 +88,7 @@ export function SalesModule({ s }: { s: ErpState }) {
         empty={<Empty title="No hay pedidos en esta vista" text="Cierra el día para recibir pedidos de la tienda virtual o crea una cotización." />}
         columns={[
           { key: 'n', header: 'Pedido', render: (o) => <strong>{o.number}</strong>, sortValue: (o) => o.number },
-          { key: 'd', header: 'Día', render: (o) => o.day, sortValue: (o) => o.day, align: 'right' },
+          { key: 'd', header: 'Día', render: (o) => (o.day < 1 ? 'Apertura' : o.day), sortValue: (o) => o.day, align: 'right' },
           { key: 'c', header: 'Cliente', render: (o) => cname(o.customerId), sortValue: (o) => cname(o.customerId) },
           { key: 'ch', header: 'Canal', render: (o) => CHANNEL[o.channel], hideSm: true },
           { key: 'f', header: 'Factura', render: (o) => o.invoiceNumber ?? '—', hideSm: true },
@@ -142,7 +142,7 @@ function OrderDetail({ s, o, onClose }: { s: ErpState; o: SalesOrder; onClose: (
       open
       wide
       title={`Pedido ${o.number}`}
-      subtitle={`${c?.name ?? ''} · ${CHANNEL[o.channel]} · día ${o.day}`}
+      subtitle={`${c?.name ?? ''} · ${CHANNEL[o.channel]} · ${o.day < 1 ? 'antes de la apertura del sistema' : `día ${o.day}`}`}
       onClose={onClose}
       footer={
         <>
@@ -183,10 +183,11 @@ function OrderDetail({ s, o, onClose }: { s: ErpState; o: SalesOrder; onClose: (
       }
     >
       {o.status === 'anulado' ? <p className="notice notice-bad">Pedido anulado.</p> : <Stepper steps={FLOW} current={STEP[o.status]} />}
+      <ShortageNotice s={s} o={o} />
       <Facts
         items={[
           ['Cliente', c?.name ?? '—'],
-          ['Factura', o.invoiceNumber ? `${o.invoiceNumber} (día ${o.invoiceDay})` : '—'],
+          ['Factura', o.invoiceNumber ? `${o.invoiceNumber} (${(o.invoiceDay ?? 0) < 1 ? 'antes de la apertura' : `día ${o.invoiceDay}`})` : '—'],
           ['Vencimiento', o.dueDay !== null ? `Día ${o.dueDay}${overdue ? ' · vencida' : ''}` : '—'],
           ['Pago', o.paidDay !== null ? `Día ${o.paidDay}` : '—'],
           ['Recordatorios', num(o.reminders)],
@@ -265,6 +266,36 @@ function OrderDetail({ s, o, onClose }: { s: ErpState; o: SalesOrder; onClose: (
         ))
       )}
     </Drawer>
+  );
+}
+
+/** Faltantes del pedido: explica la consecuencia y lleva a crear la orden de compra ya diligenciada. */
+function ShortageNotice({ s, o }: { s: ErpState; o: SalesOrder }) {
+  if (o.status !== 'cotizacion' && o.status !== 'confirmado') return null;
+  const short = o.lines
+    .map((l) => {
+      const p = s.products.find((x) => x.id === l.productId);
+      if (!p) return null;
+      const have = o.status === 'confirmado' ? p.stock : available(p);
+      return have < l.qty ? { p, missing: l.qty - Math.max(0, have) } : null;
+    })
+    .filter((x): x is { p: (typeof s.products)[number]; missing: number } => x !== null);
+  if (short.length === 0) return null;
+  const sup = s.suppliers.find((x) => x.id === short[0].p.supplierId);
+  return (
+    <div className="notice notice-warn">
+      <p>
+        <strong>Inventario insuficiente:</strong> faltan {short.map((x) => `${x.missing} ${x.p.unit} de ${x.p.sku}`).join(', ')}. Sin mercancía no puedes despachar: el
+        cliente espera y, después de dos días, puede abrir un reclamo. Compra al proveedor{sup ? ` (entrega en ${sup.leadTimeDays} días)` : ''} o ajusta la cotización.
+      </p>
+      <button
+        type="button"
+        className="btn-secondary btn-sm"
+        onClick={() => navigate({ module: 'compras', view: 'nueva', id: short.map((x) => `${x.p.id}:${x.missing}`).join(',') })}
+      >
+        Crear orden de compra por el faltante
+      </button>
+    </div>
   );
 }
 
