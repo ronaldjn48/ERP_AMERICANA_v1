@@ -57,6 +57,14 @@ Varias misiones tienen preguntas de verificación con datos de la propia empresa
 | 3. Compras y comercio electrónico | 9 a 13 | Analizar qué campañas superaron el ROAS de equilibrio. |
 | 4. Contabilidad, automatización y cierre | 14 a 20 | Presentar el estado de resultados del mes y la automatización que más tiempo ahorró. |
 
+### Duración y ritmo
+
+Las 20 misiones exigen como mínimo 30 días simulados de operación, porque la misión 18 pide cerrar el primer mes. En las pruebas, un estudiante disciplinado terminó todo en el día simulado 33. Un día simulado no es un día del calendario: se avanza con el botón Cerrar día y toma entre 1 y 4 minutos según la carga de pedidos.
+
+Tiempo real estimado para un estudiante que lee los briefings y responde las preguntas: entre 6 y 8 horas de trabajo, incluido el simulador gerencial de la misión 20 (unos 40 minutos). Se puede hacer en una sola jornada intensiva de 6 horas con pausas, pero se pierde la plenaria y la reflexión. Se recomiendan las cuatro sesiones de la tabla anterior, de 90 a 120 minutos cada una, con trabajo independiente entre sesiones.
+
+El avance se guarda solo en el navegador del estudiante. Debe usar el mismo equipo y navegador entre sesiones, o copiar el respaldo en Configuración y restaurarlo en el otro equipo.
+
 ### Evidencias de la práctica en el ERP
 
 - Informe de la bitácora de aprendizaje (Centro de misiones → Copiar informe para entregar): incluye nivel, XP, misiones con su regla de decisión, los ocho indicadores al cierre y las cuatro respuestas de reflexión. El estudiante lo pega en el aula virtual.
@@ -81,9 +89,9 @@ Estructura del código: `EMPRESA-NIVEL-MESES-MESINICIO-SEMILLA-MÓDULOS-GUIADO`.
 |---|---|---|---|---|---|
 | Inventarios y pronóstico | Americana Tech | E | Septiembre | 6 | Básico |
 | Comercio exterior y TRM | Americana Tech | E, F | Agosto | 6 | Intermedio |
-| Marketing digital y ROAS | Moda Caribe | W | Enero | 6 | Básico |
-| CRM y fidelización | Café del Atlántico | C, W | Julio | 9 | Intermedio |
-| Automatización de procesos | Café del Atlántico | A | Marzo | 6 | Básico |
+| Marketing digital y ROAS | Americana Moda | W | Enero | 6 | Básico |
+| CRM y fidelización | Americana Café | C, W | Julio | 9 | Intermedio |
+| Automatización de procesos | Americana Café | A | Marzo | 6 | Básico |
 | Integración gerencial completa | Cualquiera | Todos | Julio | 12 | Intermedio o avanzado |
 
 ## 6. Planeación de una sesión de 3 horas

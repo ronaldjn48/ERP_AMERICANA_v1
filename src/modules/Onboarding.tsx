@@ -13,7 +13,7 @@ import { loadAudioPrefs, storeAudioPrefs, type AudioPrefs } from '../storage';
 import { Icon } from '../ui/icons';
 
 const INTRO =
-  'Bienvenido a ERP Americana. Vas a trabajar en el sistema de planificación de recursos de una empresa de Barranquilla. ' +
+  'Bienvenido a ERP Americana. Vas a trabajar en el sistema de planificación de recursos de una empresa colombiana que vende a clientes de todo el país. ' +
   'Cada módulo funciona como en un software empresarial real: CRM, ventas, comercio electrónico, inventario, compras, contabilidad y automatización. ' +
   'Tus acciones generan registros, movimientos de inventario y asientos contables. ' +
   'El centro de misiones te guía con prácticas en cada módulo: ganas experiencia, subes de nivel y desbloqueas insignias. ' +

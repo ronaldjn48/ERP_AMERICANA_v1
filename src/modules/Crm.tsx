@@ -49,7 +49,7 @@ export function CrmModule({ s }: { s: ErpState }) {
 
 // ------------------------------------------------------------------ Clientes
 
-const emptyCustomer = (): CustomerInput => ({ name: '', docType: 'NIT', docNumber: '', city: 'Barranquilla', segment: 'Corporativo', email: '', phone: '', creditLimit: 0, paymentTerm: 30 });
+const emptyCustomer = (): CustomerInput => ({ name: '', docType: 'NIT', docNumber: '', city: '', segment: 'Corporativo', email: '', phone: '', creditLimit: 0, paymentTerm: 30 });
 
 function Customers({ s, openId }: { s: ErpState; openId?: string }) {
   const [editing, setEditing] = useState<CustomerInput | null>(null);

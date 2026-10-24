@@ -24,23 +24,23 @@ const CATALOG: Record<string, { products: ProductSeed[]; suppliers: Array<[strin
       { sku: 'REL-100', name: 'Reloj inteligente', category: 'Wearables', unit: 'und', cost: 120000, price: 199000, stock: 12, share: 0.08, supplier: 1 },
     ],
     suppliers: [
-      ['Mayorista Tecnológico del Norte S.A.S.', '901245781', 'Barranquilla', 2, 30],
+      ['Mayorista Tecnológico Nacional S.A.S.', '901245781', 'Bogotá D.C.', 2, 30],
       ['Importadora Pacífico Digital S.A.S.', '900874512', 'Cartagena', 6, 45],
-      ['Accesorios Móviles de Colombia S.A.S.', '901587423', 'Bogotá', 3, 30],
+      ['Accesorios Móviles de Colombia S.A.S.', '901587423', 'Medellín', 3, 30],
     ],
   },
   moda: {
     products: [
-      { sku: 'GUA-LIN', name: 'Guayabera de lino blanca', category: 'Camisería', unit: 'und', cost: 66000, price: 120000, stock: 40, share: 0.26, supplier: 0 },
+      { sku: 'CAM-BLA', name: 'Camisa de lino blanca', category: 'Camisería', unit: 'und', cost: 66000, price: 120000, stock: 40, share: 0.26, supplier: 0 },
       { sku: 'CAM-AZU', name: 'Camisa de lino azul', category: 'Camisería', unit: 'und', cost: 58000, price: 105000, stock: 35, share: 0.2, supplier: 0 },
-      { sku: 'VES-PLA', name: 'Vestido playero', category: 'Dama', unit: 'und', cost: 72000, price: 139000, stock: 28, share: 0.18, supplier: 1 },
+      { sku: 'VES-ALG', name: 'Vestido casual de algodón', category: 'Dama', unit: 'und', cost: 72000, price: 139000, stock: 28, share: 0.18, supplier: 1 },
       { sku: 'PAN-LIN', name: 'Pantalón de lino', category: 'Pantalonería', unit: 'und', cost: 60000, price: 115000, stock: 30, share: 0.16, supplier: 1 },
       { sku: 'SOM-VUE', name: 'Sombrero vueltiao 19 vueltas', category: 'Accesorios', unit: 'und', cost: 85000, price: 160000, stock: 15, share: 0.1, supplier: 2 },
       { sku: 'BOL-TEJ', name: 'Bolso tejido artesanal', category: 'Accesorios', unit: 'und', cost: 95000, price: 180000, stock: 12, share: 0.1, supplier: 2 },
     ],
     suppliers: [
-      ['Taller de Confecciones La Arenosa S.A.S.', '901334218', 'Barranquilla', 4, 30],
-      ['Textiles del Litoral S.A.S.', '900665120', 'Barranquilla', 5, 30],
+      ['Confecciones Hilo Fino S.A.S.', '901334218', 'Medellín', 4, 30],
+      ['Textiles Integrales de Colombia S.A.S.', '900665120', 'Bogotá D.C.', 5, 30],
       ['Artesanías del Sinú S.A.S.', '901098456', 'Montería', 8, 15],
     ],
   },
@@ -54,25 +54,26 @@ const CATALOG: Record<string, { products: ProductSeed[]; suppliers: Array<[strin
       { sku: 'FIL-100', name: 'Filtros de papel x 100', category: 'Accesorios', unit: 'paquete', cost: 5000, price: 12000, stock: 90, share: 0.14, supplier: 2 },
     ],
     suppliers: [
-      ['Trilladora Sierra Nevada S.A.S.', '900452369', 'Santa Marta', 3, 30],
-      ['Empaques y Regalos del Caribe S.A.S.', '901223654', 'Barranquilla', 4, 30],
+      ['Trilladora Cordillera Central S.A.S.', '900452369', 'Manizales', 3, 30],
+      ['Empaques y Regalos Express S.A.S.', '901223654', 'Bogotá D.C.', 4, 30],
       ['Menaje Barista S.A.S.', '901774120', 'Medellín', 5, 45],
     ],
   },
 };
 
 const CUSTOMERS: Array<Omit<Customer, 'id' | 'code' | 'origin' | 'createdDay' | 'active'>> = [
-  { name: 'Distribuidora Costa Norte S.A.S.', docType: 'NIT', docNumber: '901456123', city: 'Barranquilla', segment: 'Mayorista', email: 'compras@costanorte.com.co', phone: '6053456789', creditLimit: 15000000, paymentTerm: 30 },
-  { name: 'Hotel Brisas del Malecón S.A.S.', docType: 'NIT', docNumber: '900789654', city: 'Barranquilla', segment: 'Corporativo', email: 'suministros@brisasmalecon.co', phone: '6053214567', creditLimit: 10000000, paymentTerm: 30 },
-  { name: 'Comercializadora Puerta de Oro S.A.S.', docType: 'NIT', docNumber: '901112233', city: 'Soledad', segment: 'Mayorista', email: 'gerencia@puertadeoro.co', phone: '6053987456', creditLimit: 12000000, paymentTerm: 45 },
-  { name: 'Clínica Ribera del Río S.A.S.', docType: 'NIT', docNumber: '900334455', city: 'Barranquilla', segment: 'Corporativo', email: 'bienestar@riberadelrio.co', phone: '6053741258', creditLimit: 8000000, paymentTerm: 30 },
-  { name: 'María Fernanda Ospino', docType: 'CC', docNumber: '1045678912', city: 'Barranquilla', segment: 'Minorista', email: 'mfospino@correo.co', phone: '3004567812', creditLimit: 0, paymentTerm: 0 },
-  { name: 'Carlos Andrés Mejía', docType: 'CC', docNumber: '72345678', city: 'Puerto Colombia', segment: 'Minorista', email: 'camejia@correo.co', phone: '3157894561', creditLimit: 0, paymentTerm: 0 },
+  { name: 'Distribuidora Red Nacional S.A.S.', docType: 'NIT', docNumber: '901456123', city: 'Bogotá D.C.', segment: 'Mayorista', email: 'compras@rednacional.com.co', phone: '6013456789', creditLimit: 15000000, paymentTerm: 30 },
+  { name: 'Hotel Plaza Central S.A.S.', docType: 'NIT', docNumber: '900789654', city: 'Medellín', segment: 'Corporativo', email: 'suministros@hotelplazacentral.co', phone: '6043214567', creditLimit: 10000000, paymentTerm: 30 },
+  { name: 'Comercializadora Punto Alto S.A.S.', docType: 'NIT', docNumber: '901112233', city: 'Cali', segment: 'Mayorista', email: 'gerencia@puntoalto.co', phone: '6023987456', creditLimit: 12000000, paymentTerm: 45 },
+  { name: 'Clínica Vida Integral S.A.S.', docType: 'NIT', docNumber: '900334455', city: 'Bucaramanga', segment: 'Corporativo', email: 'bienestar@vidaintegral.co', phone: '6077741258', creditLimit: 8000000, paymentTerm: 30 },
+  { name: 'María Fernanda Rojas', docType: 'CC', docNumber: '1045678912', city: 'Pereira', segment: 'Minorista', email: 'mfrojas@correo.co', phone: '3004567812', creditLimit: 0, paymentTerm: 0 },
+  { name: 'Carlos Andrés Mejía', docType: 'CC', docNumber: '72345678', city: 'Barranquilla', segment: 'Minorista', email: 'camejia@correo.co', phone: '3157894561', creditLimit: 0, paymentTerm: 0 },
 ];
 
 export const FIRST_NAMES = ['Valentina', 'Santiago', 'Daniela', 'Andrés', 'Camila', 'Juan Pablo', 'Laura', 'Sebastián', 'Mariana', 'Luis Carlos', 'Isabella', 'Jorge', 'Natalia', 'Kevin', 'Paola', 'Jesús', 'Yuliana', 'Óscar'];
-export const LAST_NAMES = ['Pérez', 'Gutiérrez', 'Barrios', 'De la Hoz', 'Charris', 'Polo', 'Ariza', 'Mendoza', 'Rodríguez', 'Escorcia', 'Fontalvo', 'Sarmiento', 'Orozco', 'Pacheco', 'Navarro', 'Cantillo'];
-export const CITIES = ['Barranquilla', 'Soledad', 'Malambo', 'Puerto Colombia', 'Cartagena', 'Santa Marta', 'Valledupar', 'Sincelejo', 'Montería', 'Bogotá', 'Medellín'];
+export const LAST_NAMES = ['Pérez', 'Gutiérrez', 'Gómez', 'Martínez', 'López', 'García', 'Mendoza', 'Rodríguez', 'Hernández', 'Ramírez', 'Castro', 'Sarmiento', 'Orozco', 'Vargas', 'Navarro', 'Torres'];
+/** Ciudades de clientes y prospectos: cobertura nacional, sin una región protagonista. */
+export const CITIES = ['Bogotá D.C.', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga', 'Cartagena', 'Pereira', 'Manizales', 'Ibagué', 'Villavicencio', 'Cúcuta', 'Montería', 'Pasto', 'Neiva', 'Tunja'];
 
 export const DEFAULT_RULES: Array<Omit<AutomationRule, 'id' | 'runs' | 'lastRunDay'>> = [
   { type: 'reorden', name: 'Reabastecimiento automático', active: false, params: { aprobarHasta: 3000000 } },
@@ -104,7 +105,7 @@ export function defaultSettings(scenarioId: string): Settings {
   return {
     companyName: s.company,
     nit: '',
-    city: 'Barranquilla',
+    city: '',
     address: '',
     ivaRate: 0.19,
     defaultPaymentTerm: 30,

@@ -1,6 +1,6 @@
 # ERP Americana · Suite empresarial educativa
 
-Aplicativo web que reproduce un software ERP real para enseñar gestión empresarial. El estudiante opera una empresa de Barranquilla desde una suite con barra lateral de módulos, buscador global, notificaciones y registros editables. Cada acción genera sus movimientos de inventario y sus asientos contables de partida doble. Un centro de misiones gamificado guía la práctica módulo por módulo, y el simulador gerencial original queda integrado como módulo estratégico.
+Aplicativo web que reproduce un software ERP real para enseñar gestión empresarial. El estudiante opera una empresa colombiana con clientes y proveedores en distintas ciudades del país desde una suite con barra lateral de módulos, buscador global, notificaciones y registros editables. Cada acción genera sus movimientos de inventario y sus asientos contables de partida doble. Un centro de misiones gamificado guía la práctica módulo por módulo, y el simulador gerencial original queda integrado como módulo estratégico.
 
 Funciona en el navegador, sin servidor, sin claves de API y sin conexión después de cargar. La narración por voz usa la síntesis del propio navegador.
 

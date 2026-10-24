@@ -324,7 +324,7 @@ function PurchaseForm({ s, initial, onClose }: { s: ErpState; initial: PurchaseL
   );
 }
 
-const emptySupplier = (): SupplierInput => ({ name: '', nit: '', city: 'Barranquilla', email: '', leadTimeDays: 3, paymentTermDays: 30 });
+const emptySupplier = (): SupplierInput => ({ name: '', nit: '', city: '', email: '', leadTimeDays: 3, paymentTermDays: 30 });
 
 function Suppliers({ s, openId }: { s: ErpState; openId?: string }) {
   const [editing, setEditing] = useState<SupplierInput | null>(null);

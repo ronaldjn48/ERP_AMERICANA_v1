@@ -158,7 +158,7 @@ export function closeDay(s: ErpState): ErpState {
     if (rng.next() < 0.3 * intensity) {
       const sources = ['web', 'referido', 'feria', 'redes', 'llamada'] as const;
       const contact = `${rng.pick(FIRST_NAMES)} ${rng.pick(LAST_NAMES)}`;
-      const companies = ['Colegio Bilingüe del Caribe', 'Constructora Arenas Blancas', 'Restaurante La Cayena', 'Gimnasio Brisa Fit', 'Agencia Viajes Sol Caribe', 'Droguería Vida Plena'];
+      const companies = ['Colegio Bilingüe Horizonte', 'Constructora Bases Firmes', 'Restaurante Sabor de Casa', 'Gimnasio Energía Fit', 'Agencia de Viajes Rutas de Colombia', 'Droguería Vida Plena'];
       const company = rng.pick(companies);
       d.opportunities.push({
         id: nextId(d, 'opo'),

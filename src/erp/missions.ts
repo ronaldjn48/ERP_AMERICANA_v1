@@ -64,11 +64,11 @@ export const MISSIONS: Mission[] = [
     title: 'Primer día en la empresa',
     concept: 'Datos maestros y navegación del ERP',
     briefing:
-      'Bienvenido a tu primer día como analista. Un ERP integra todas las áreas de la empresa en una sola base de datos. Antes de operar, registra los datos legales de la empresa, recorre los módulos principales y cierra tu primer día de operación con el botón Cerrar día de la barra superior.',
+      'Bienvenido a tu primer día como analista. Un ERP integra todas las áreas de la empresa en una sola base de datos. Antes de operar, registra los datos legales de la empresa (NIT, ciudad de la sede y dirección; elige la ciudad donde estudias o trabajas), recorre los módulos principales y cierra tu primer día de operación con el botón Cerrar día de la barra superior.',
     xp: 100,
     requires: [],
     objectives: [
-      { id: 'o1', kind: 'check', text: 'Registra el NIT y la dirección de la empresa en Configuración', check: (s) => Boolean(s.settings.nit && s.settings.address.trim().length >= 5), go: { module: 'configuracion' } },
+      { id: 'o1', kind: 'check', text: 'Registra el NIT, la ciudad y la dirección de la empresa en Configuración', check: (s) => Boolean(s.settings.nit && s.settings.city.trim().length >= 3 && s.settings.address.trim().length >= 5), go: { module: 'configuracion' } },
       { id: 'o2', kind: 'check', text: 'Visita los módulos CRM, Ventas, Inventario y Contabilidad', check: (s) => ['crm', 'ventas', 'inventario', 'contabilidad'].every((m) => s.visited[m]), go: { module: 'crm' } },
       { id: 'o3', kind: 'check', text: 'Cierra tu primer día de operación', check: (s) => st(s, 'dias_cerrados') >= 1 },
     ],

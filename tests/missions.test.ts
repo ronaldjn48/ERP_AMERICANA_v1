@@ -21,7 +21,7 @@ describe('misiones', () => {
   it('la primera misión se completa con datos de empresa, visitas y cierre de día', () => {
     let s = ws();
     expect(missionStatus(s, MISSIONS[1])).toBe('bloqueada');
-    s = updateSettings(s, { nit: '901234567-8', address: 'Calle 72 # 45-10' });
+    s = updateSettings(s, { nit: '901234567-8', city: 'Montería', address: 'Calle 72 # 45-10' });
     for (const m of ['crm', 'ventas', 'inventario', 'contabilidad']) s = markVisited(s, m);
     s = closeDay(s);
     const { state, events } = evaluateMissions(s, ctx);

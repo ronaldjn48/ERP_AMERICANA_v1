@@ -33,7 +33,7 @@ const TEMPLATES: EventTemplate[] = [
       module: 'erp',
       title: 'Retraso en puerto',
       description:
-        'Una congestión en el puerto de Barranquilla retrasa un mes la mercancía importada que debía llegar este mes.',
+        'Una congestión en los puertos del país retrasa un mes la mercancía importada que debía llegar este mes.',
       lesson:
         'El tiempo de entrega (lead time) es incierto. El stock de seguridad protege el nivel de servicio cuando el proveedor falla.',
     }),

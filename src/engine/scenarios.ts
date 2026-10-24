@@ -32,7 +32,7 @@ export const SCENARIOS: Scenario[] = [
     product: 'audífonos inalámbricos',
     unitName: 'unidades',
     description:
-      'Tienda en línea de Barranquilla que vende audífonos inalámbricos. Puede comprar a un mayorista local o importar desde Asia con tiempo de tránsito de un mes.',
+      'Tienda en línea colombiana que vende audífonos inalámbricos a todo el país. Puede comprar a un mayorista local o importar desde Asia con tiempo de tránsito de un mes.',
     challenge:
       'Decidir entre proveedor local o importación según la TRM, sostener el inventario para Black Friday y diciembre, y medir si la pauta digital es rentable.',
     refPrice: 89000,
@@ -82,14 +82,14 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'moda',
-    company: 'Moda Caribe S.A.S.',
+    company: 'Americana Moda S.A.S.',
     sector: 'Confección y venta de ropa',
-    product: 'guayaberas y camisas de lino',
+    product: 'camisas de lino',
     unitName: 'prendas',
     description:
-      'Marca de ropa de Barranquilla que vende por su tienda virtual. Confecciona con talleres locales; importar prendas paga aranceles textiles altos.',
+      'Marca colombiana de ropa que vende a todo el país por su tienda virtual. Confecciona con talleres nacionales; importar prendas paga aranceles textiles altos.',
     challenge:
-      'Aprovechar el Carnaval, el Día de la Madre y diciembre sin quedarse con inventario que pasa de moda, y fidelizar clientes con buen servicio.',
+      'Aprovechar la temporada de ferias y carnavales, el Día de la Madre y diciembre sin quedarse con inventario que pasa de moda, y fidelizar clientes con buen servicio.',
     refPrice: 120000,
     elasticity: 2.3,
     baseDemand: 720,
@@ -104,7 +104,7 @@ export const SCENARIOS: Scenario[] = [
     repurchaseRate: 0.05,
     seasonality: [0.8, 1.45, 0.9, 0.85, 1.2, 1.15, 0.9, 0.85, 0.95, 1.0, 1.2, 1.6],
     seasonNotes: {
-      1: 'Febrero es Carnaval de Barranquilla: la demanda de ropa fresca se dispara.',
+      1: 'Febrero reúne ferias y carnavales en varias regiones del país: la demanda de ropa se dispara.',
       4: 'Mayo trae el Día de la Madre.',
       5: 'Junio combina prima de mitad de año y Día del Padre.',
       11: 'Diciembre es el pico del año por primas y Navidad.',
@@ -137,12 +137,12 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'cafe',
-    company: 'Café del Atlántico S.A.S.',
+    company: 'Americana Café S.A.S.',
     sector: 'Alimentos y bebidas',
     product: 'café especial en bolsa de 500 g',
     unitName: 'bolsas',
     description:
-      'Tostadora de café especial que vende por suscripción y tienda en línea. El producto es perecedero y los clientes recompran cada mes si el servicio es bueno.',
+      'Tostadora colombiana de café especial que vende a todo el país por suscripción y tienda en línea. El producto es perecedero y los clientes recompran cada mes si el servicio es bueno.',
     challenge:
       'Construir una base de clientes recurrentes, controlar el costo del envío y evitar que el café se envejezca en bodega.',
     refPrice: 38000,

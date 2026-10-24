@@ -35,8 +35,8 @@ Ninguno de los dos repositorios contenía código fuente, dependencias, configur
 | Escenario | Gestión informada | Política sin cambios | Gestión descuidada |
 |---|---|---|---|
 | Americana Tech | 4,5 | 3,5 | 2,5 |
-| Moda Caribe | 4,6 | 3,9 | 3,6 |
-| Café del Atlántico | 4,7 | 3,8 | 3,7 |
+| Americana Moda | 4,6 | 3,9 | 3,6 |
+| Americana Café | 4,7 | 3,8 | 3,7 |
 
    La gestión descuidada sube el precio 40 %, compra en exceso, invierte de más en pauta y deja un solo asesor. Se ajustaron elasticidades, costos y el cuadro de mando para que el precio alto no fuera una estrategia dominante.
 6. Persistencia local tolerante a fallos: si el navegador bloquea el almacenamiento (modo privado o LMS en iframe), la partida sigue en memoria.

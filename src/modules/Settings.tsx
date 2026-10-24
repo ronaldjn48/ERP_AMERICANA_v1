@@ -31,7 +31,7 @@ export function SettingsModule({ s }: { s: ErpState }) {
           <FormGrid>
             <TextField label="Razón social" value={f.companyName} onChange={(v) => set({ companyName: v })} required />
             <TextField label="NIT" value={f.nit} onChange={(v) => set({ nit: v.replace(/[^\d-]/g, '') })} placeholder="901234567-8" help="9 dígitos y dígito de verificación." inputMode="numeric" />
-            <TextField label="Ciudad" value={f.city} onChange={(v) => set({ city: v })} />
+            <TextField label="Ciudad" value={f.city} onChange={(v) => set({ city: v })} placeholder="Ciudad de la sede principal" help="Escribe la ciudad donde estudias o trabajas; la empresa vende a todo el país." />
             <TextField label="Dirección" value={f.address} onChange={(v) => set({ address: v })} placeholder="Calle 72 # 45-10" />
           </FormGrid>
         </Section>
