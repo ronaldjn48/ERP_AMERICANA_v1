@@ -57,6 +57,27 @@ Varias misiones tienen preguntas de verificación con datos de la propia empresa
 | 3. Compras y comercio electrónico | 9 a 13 | Analizar qué campañas superaron el ROAS de equilibrio. |
 | 4. Contabilidad, automatización y cierre | 14 a 20 | Presentar el estado de resultados del mes y la automatización que más tiempo ahorró. |
 
+### Vista del docente
+
+Para revisar todo el contenido sin recorrer el aplicativo, abra la Vista del docente. Está en el botón superior de la pantalla de bienvenida, en el módulo Aprendizaje y en el enlace del aplicativo terminado en `#docente`. La clave es `AMERICANA-DOCENTE` (no distingue mayúsculas). La clave solo evita que el estudiante entre por curiosidad; no es una protección de seguridad.
+
+La vista tiene seis pestañas:
+
+| Pestaña | Contenido |
+|---|---|
+| Resumen y ruta | Cantidades, duración, sesiones sugeridas, resultados de aprendizaje, niveles, insignias, bitácora y guía de cada módulo. |
+| Misiones y respuestas | Las 20 misiones con instrucciones, objetivos, preguntas, respuesta esperada y regla de decisión. Filtro por módulo. |
+| Empresas y datos | Las tres empresas con temporadas, productos, proveedores, clientes y gastos fijos. |
+| Indicadores y reglas | Los 8 indicadores con meta, significado y acción, y las 7 reglas de automatización. |
+| Simulador gerencial | Escala de notas, dificultades, áreas de decisión, eventos con su lección, preguntas de conceptos con respuesta, reflexión y glosario. |
+| Revisar a un estudiante | Pegue el respaldo del estudiante (Configuración → Copiar respaldo) para ver su avance, las respuestas correctas con sus datos, sus indicadores y su bitácora, sin reemplazar la práctica guardada. |
+
+El botón Copiar todo el contenido copia el material completo para pegarlo en Word o Google Docs. El mismo contenido está en `docs/CONTENIDO_DOCENTE.md`, que se regenera con `npm run docs:docente`.
+
+### Idioma y voz
+
+Los textos están en español de Colombia. La narración usa las voces instaladas en el equipo y elige primero voces de Colombia y Latinoamérica; las de España quedan de último recurso. Si el equipo solo tiene voces de España, el panel de Audio lo indica: en Chrome elija "Google español de Estados Unidos" y en Edge las voces de Colombia o México.
+
 ### Duración y ritmo
 
 Las 20 misiones exigen como mínimo 30 días simulados de operación, porque la misión 18 pide cerrar el primer mes. En las pruebas, un estudiante disciplinado terminó todo en el día simulado 33. Un día simulado no es un día del calendario: se avanza con el botón Cerrar día y toma entre 1 y 4 minutos según la carga de pedidos.

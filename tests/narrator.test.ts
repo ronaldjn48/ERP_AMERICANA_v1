@@ -104,6 +104,17 @@ describe('narrador', () => {
     expect(sorted[sorted.length - 1].spanish).toBe(false);
   });
 
+  it('deja las voces de España después de las latinoamericanas', () => {
+    const sorted = sortVoices([
+      { voiceURI: 'es', name: 'Google español', lang: 'es-ES' },
+      { voiceURI: 'ar', name: 'Elena', lang: 'es-AR' },
+      { voiceURI: 'mx', name: 'Microsoft Sabina', lang: 'es-MX' },
+      { voiceURI: 'co', name: 'Microsoft Salome Online (Natural)', lang: 'es-CO' },
+      { voiceURI: 'co2', name: 'Voz básica', lang: 'es_CO' },
+    ]);
+    expect(sorted.map((v) => v.voiceURI)).toEqual(['co', 'co2', 'mx', 'ar', 'es']);
+  });
+
   it('lee todos los fragmentos en orden y vuelve a reposo', () => {
     const { synth, narrator } = setup();
     narrator.speak(LONG, 'demo');

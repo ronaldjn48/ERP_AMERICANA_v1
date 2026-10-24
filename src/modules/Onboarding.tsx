@@ -7,7 +7,7 @@ import { randomSeed } from '../engine/rng';
 import { SCENARIOS } from '../engine/scenarios';
 import { MISSIONS, TOTAL_XP } from '../erp/missions';
 import { createWorkspace, defaultSettings } from '../erp/seed';
-import { startWorkspace } from '../erp/store';
+import { openTeacher, startWorkspace } from '../erp/store';
 import type { ModuleKey } from '../erp/types';
 import { loadAudioPrefs, storeAudioPrefs, type AudioPrefs } from '../storage';
 import { Icon } from '../ui/icons';
@@ -33,7 +33,7 @@ const FEATURES: Array<[ModuleKey, string, string]> = [
 function hashCode(): string {
   if (typeof window === 'undefined') return '';
   const m = window.location.hash.match(/^#(?:codigo=)?([A-Za-z0-9-]+)$/);
-  return m ? decodeURIComponent(m[1]) : '';
+  return m && m[1] !== 'docente' ? decodeURIComponent(m[1]) : '';
 }
 
 export function Onboarding() {
@@ -79,13 +79,18 @@ export function Onboarding() {
             <small>Suite empresarial educativa</small>
           </div>
         </div>
-        <AudioBar
-          prefs={audio}
-          onChange={(p) => {
-            setAudio(p);
-            storeAudioPrefs(p);
-          }}
-        />
+        <div className="row">
+          <button type="button" className="btn-ghost" onClick={() => openTeacher(true)}>
+            Vista del docente
+          </button>
+          <AudioBar
+            prefs={audio}
+            onChange={(p) => {
+              setAudio(p);
+              storeAudioPrefs(p);
+            }}
+          />
+        </div>
       </header>
       <main className="onb-main" id="erp-main">
         <section className="onb-hero">

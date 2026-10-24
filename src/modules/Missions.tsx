@@ -4,7 +4,7 @@ import { SpeakButton } from '../components/ui';
 import { MODULE_LABEL } from '../erp/meta';
 import { BADGES, LEVELS, MISSIONS, TOTAL_XP, answerQuestion, levelOf, missionProgress, missionStatus, objectiveDone, setActiveMission, type Mission, type QuestionObjective } from '../erp/missions';
 import { copyText } from '../export';
-import { decisionIndicators } from '../erp/insights';
+import { JOURNAL_PROMPTS, learningReport } from '../erp/report';
 import { missionContext, navigate, replaceWorkspace, run, toast, useRoute } from '../erp/store';
 import type { ErpState } from '../erp/types';
 import { Icon } from '../ui/icons';
@@ -84,36 +84,12 @@ export function MissionsModule({ s }: { s: ErpState }) {
   );
 }
 
-const JOURNAL_PROMPTS = [
-  '¿Qué decisión tomaste en el ERP que más mejoró un indicador? Nombra el indicador y su valor antes y después.',
-  '¿Qué error o faltante tuviste y qué hiciste para corregirlo (compra, cobro, ajuste o automatización)?',
-  '¿Cómo se conectan las áreas de la empresa? Explica cómo una venta afectó el inventario, la cartera y la contabilidad.',
-  '¿Qué regla de decisión aplicarías en una empresa real de tu región y por qué?',
-];
 
 /** Bitácora de aprendizaje: reflexión escrita y un informe para entregar en el aula virtual. */
 function Journal({ s }: { s: ErpState }) {
   const [answers, setAnswers] = useState<string[]>(s.reflections ?? []);
   const saved = JSON.stringify(answers) === JSON.stringify(s.reflections ?? []);
-  const lvl = levelOf(s.gamification.xp);
-  const report = () => {
-    const indicators = decisionIndicators(s);
-    return [
-      `Bitácora de aprendizaje · ERP Americana`,
-      `Estudiante: ${s.profile.name}${s.profile.group ? ` · ${s.profile.group}` : ''}`,
-      `Empresa: ${s.settings.companyName} · día ${s.day} de operación`,
-      `Nivel: ${lvl.name} · ${s.gamification.xp} XP · ${Object.keys(s.gamification.completed).length} de ${MISSIONS.length} misiones · ${s.gamification.badges.length} insignias`,
-      '',
-      'Misiones completadas y reglas de decisión:',
-      ...MISSIONS.filter((x) => s.gamification.completed[x.id] !== undefined).map((x) => `- ${x.title} (día ${s.gamification.completed[x.id]}): ${x.takeaway}`),
-      '',
-      'Indicadores al cierre:',
-      ...indicators.map((i) => `- ${i.label}: ${i.value} (${i.target}) · ${i.status === 'bien' ? 'en meta' : i.status === 'atencion' ? 'atención' : i.status === 'critico' ? 'crítico' : 'sin datos'}`),
-      '',
-      'Reflexión:',
-      ...JOURNAL_PROMPTS.map((p, i) => `${i + 1}. ${p}\n${(answers[i] ?? '').trim() || '(sin respuesta)'}`),
-    ].join('\n');
-  };
+  const report = () => learningReport(s, answers);
   return (
     <section className="panel journal-panel" aria-labelledby="journal-title">
       <header className="panel-head">

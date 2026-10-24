@@ -136,7 +136,14 @@ Se automatizó un recorrido de estudiante real que completa las 20 misiones usan
 | Regla de decisión por misión | Cada logro deja un principio aplicable a una empresa real; se muestra y se narra al completar la misión. |
 | Bitácora de aprendizaje (Centro de misiones) | Metacognición: cuatro preguntas de reflexión con datos de su práctica e informe para entregar. |
 
-## 8. Recomendaciones pendientes
+## 8. Quinta revisión: contexto nacional, idioma y vista del docente
+
+- Contexto nacional: clientes, proveedores y prospectos en ciudades de todas las regiones. La ciudad de la empresa la registra el estudiante en la misión 1.
+- Idioma: los textos usan español de Colombia. La voz prioriza Colombia y Latinoamérica, y deja las voces de España como último recurso con un aviso en el panel de Audio.
+- Vista del docente: muestra todo el contenido con respuestas en seis pestañas y revisa el respaldo de un estudiante. Se probó en navegador a 1280 y 390 px: clave correcta e incorrecta, las seis pestañas, respaldo válido e inválido y regreso al ERP, sin desbordes ni errores.
+- Corrección del informe anterior: hay 8 preguntas de verificación (no 9) en las misiones 2, 5, 7, 8, 10, 13, 14 y 18.
+
+## 9. Recomendaciones pendientes
 
 1. Activar GitHub Pages (Settings → Pages → Source: GitHub Actions) para publicar el simulador.
 2. Si el código original de AI Studio existe, subirlo a una rama aparte para compararlo con esta versión antes de descartarlo.

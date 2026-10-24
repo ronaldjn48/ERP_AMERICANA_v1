@@ -77,6 +77,21 @@ export const toastStore = new Store<Toast[]>([]);
 /** Misión recién completada para mostrar la celebración. */
 export const celebrationStore = new Store<{ title: string; xp: number; badges: string[]; level: string | null; takeaway: string } | null>(null);
 
+/** Vista del docente: se abre con el botón de la bienvenida, el módulo Aprendizaje o el enlace terminado en #docente. */
+const TEACHER_HASH = '#docente';
+export const teacherStore = new Store<boolean>(typeof window !== 'undefined' && window.location.hash === TEACHER_HASH);
+export const useTeacher = () => useSyncExternalStore(teacherStore.subscribe, teacherStore.get, teacherStore.get);
+export function openTeacher(open: boolean) {
+  teacherStore.set(open);
+  try {
+    if (open) window.history.replaceState(null, '', TEACHER_HASH);
+    else if (window.location.hash === TEACHER_HASH) window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    window.scrollTo(0, 0);
+  } catch {
+    // Algunos marcos incrustados no permiten cambiar la dirección; la vista funciona igual.
+  }
+}
+
 export const useErp = () => useSyncExternalStore(erpStore.subscribe, erpStore.get, erpStore.get);
 export const useRoute = () => useSyncExternalStore(routeStore.subscribe, routeStore.get, routeStore.get);
 export const useToasts = () => useSyncExternalStore(toastStore.subscribe, toastStore.get, toastStore.get);

@@ -2081,3 +2081,79 @@ body.dock-closed .erp-main {
 .impact p {
   margin: 0;
 }
+
+/* Vista del docente */
+.onb-main.teacher-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  padding-bottom: 3rem;
+}
+.teacher-main > * {
+  min-width: 0;
+}
+.teacher-gate {
+  max-width: 460px;
+  margin: 3rem auto;
+}
+.teacher-gate h1 {
+  margin-top: 0;
+}
+.teacher-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 0.75rem;
+}
+.teacher-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+.teacher-card h3 {
+  margin: 0.2rem 0 0.4rem;
+}
+.teacher-mission h2 {
+  margin: 0.2rem 0 0.4rem;
+}
+.teacher-objectives {
+  display: grid;
+  gap: 0.6rem;
+  padding-left: 1.25rem;
+}
+.teacher-answer {
+  margin-top: 0.3rem;
+  padding: 0.4rem 0.6rem;
+  border-left: 3px solid var(--good);
+  background: var(--good-soft);
+  border-radius: 4px;
+}
+.teacher-table th,
+.teacher-table td {
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+}
+.teacher-table td {
+  min-width: 6rem;
+}
+.teacher-quiz > li + li {
+  margin-top: 1rem;
+}
+.teacher-glossary {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+}
+.teacher-glossary dt {
+  font-weight: 600;
+}
+.teacher-glossary dd {
+  margin: 0.1rem 0 0;
+}
+@media print {
+  .teacher .onb-top,
+  .teacher .page-actions,
+  .teacher .subnav {
+    display: none;
+  }
+}

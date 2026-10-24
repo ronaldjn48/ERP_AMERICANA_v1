@@ -1,4 +1,4 @@
-import type { Rng } from './rng';
+import { Rng } from './rng';
 import type { EventId, Scenario, SimConfig, SimEvent } from './types';
 
 interface EventTemplate {
@@ -171,3 +171,8 @@ export function drawEvent(
 }
 
 export const EVENT_IDS = TEMPLATES.map((t) => t.id);
+
+/** Catálogo completo de eventos de un escenario (vista del docente). Indica si el evento puede salir con todos los módulos activos. */
+export function eventCatalog(scenario: Scenario, config: SimConfig): Array<SimEvent & { applies: boolean }> {
+  return TEMPLATES.map((t) => ({ ...t.build(scenario, new Rng(7)), applies: t.applies(scenario, config) }));
+}

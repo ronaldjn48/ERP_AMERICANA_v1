@@ -1,52 +1,12 @@
 import { useState } from 'react';
 import { cop } from '../engine/format';
-import { GUIDES } from '../erp/meta';
+import { GUIDES, RULE_INFO } from '../erp/meta';
 import { saveRule } from '../erp/ops';
 import { run } from '../erp/store';
-import type { AutomationRule, ErpState, RuleType } from '../erp/types';
+import type { AutomationRule, ErpState } from '../erp/types';
 import { Icon } from '../ui/icons';
 import { ModuleGuide, NumberInput, PageHeader } from '../ui/kit';
 
-const RULE_INFO: Record<RuleType, { when: string; then: string; params: Array<{ key: string; label: string; suffix?: string; step?: number; help?: string }> }> = {
-  reorden: {
-    when: 'al cerrar el día, el disponible de un producto es menor o igual a su punto de reorden y no tiene una orden abierta',
-    then: 'crea una orden de compra al proveedor principal por la cantidad de reposición y la aprueba si no supera el monto definido',
-    params: [{ key: 'aprobarHasta', label: 'Aprobar automáticamente hasta', suffix: 'COP', step: 500000, help: 'Las órdenes de mayor valor quedan en borrador para revisión.' }],
-  },
-  despacho_auto: {
-    when: 'al cerrar el día hay pedidos confirmados con inventario suficiente',
-    then: 'despacha el pedido: descarga el kardex y registra el costo de ventas',
-    params: [{ key: 'soloWeb', label: 'Solo pedidos web (1 = sí, 0 = todos)', step: 1 }],
-  },
-  factura_web: {
-    when: 'un pedido de la tienda virtual quedó despachado',
-    then: 'emite la factura electrónica y registra el recaudo de la pasarela de pagos',
-    params: [],
-  },
-  recordatorio_cobro: {
-    when: 'una factura a crédito lleva vencida los días indicados',
-    then: 'envía un recordatorio de cobro por WhatsApp (máximo 3 por factura)',
-    params: [{ key: 'diasVencida', label: 'Días de vencimiento', suffix: 'días', step: 1 }],
-  },
-  escalar_casos: {
-    when: 'un caso de servicio lleva abierto los días indicados',
-    then: 'sube su prioridad a alta y avisa al equipo',
-    params: [{ key: 'diasAbierto', label: 'Días abierto', suffix: 'días', step: 1 }],
-  },
-  correo_confirmacion: {
-    when: 'se confirma un pedido de un cliente con correo registrado',
-    then: 'envía el correo de confirmación con el detalle del pedido',
-    params: [],
-  },
-  pausar_campana: {
-    when: 'una campaña activa cumple los días mínimos y su ROAS es menor al mínimo',
-    then: 'pausa la campaña para no seguir invirtiendo sin retorno',
-    params: [
-      { key: 'roasMinimo', label: 'ROAS mínimo', step: 0.1 },
-      { key: 'diasMinimos', label: 'Días mínimos de prueba', suffix: 'días', step: 1 },
-    ],
-  },
-};
 
 export function AutomationModule({ s }: { s: ErpState }) {
   const log = [...s.log].filter((l) => l.module === 'automatizacion').reverse().slice(0, 25);

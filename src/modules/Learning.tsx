@@ -1,6 +1,7 @@
 import { Glossary } from '../components/Glossary';
 import { SpeakButton } from '../components/ui';
 import { LEARNING_OUTCOMES } from '../content/pedagogy';
+import { openTeacher } from '../erp/store';
 import { PageHeader, Section } from '../ui/kit';
 
 const FLOWS = [
@@ -21,7 +22,16 @@ const FLOWS = [
 export function LearningModule() {
   return (
     <div className="page">
-      <PageHeader title="Aprendizaje" crumbs={['Formación', 'Aprendizaje']} subtitle="Resultados de aprendizaje, procesos integrados y glosario gerencial." />
+      <PageHeader
+        title="Aprendizaje"
+        crumbs={['Formación', 'Aprendizaje']}
+        subtitle="Resultados de aprendizaje, procesos integrados y glosario gerencial."
+        actions={
+          <button type="button" className="btn-secondary" onClick={() => openTeacher(true)}>
+            Vista del docente
+          </button>
+        }
+      />
       <div className="grid-2">
         <Section title="Resultados de aprendizaje">
           <ol className="outcomes">

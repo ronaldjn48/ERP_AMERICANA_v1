@@ -19,6 +19,7 @@ Funciona en el navegador, sin servidor, sin claves de API y sin conexión despu�
 | Centro de misiones | 20 misiones con objetivos verificados en los datos, preguntas de cálculo, 3.420 XP, 6 niveles y 10 insignias. Cada misión entrega una regla de decisión. Bitácora de aprendizaje con cuatro preguntas de reflexión y un informe para copiar y entregar. Panel flotante con la misión activa y botón "Ir" al módulo. |
 | Simulador gerencial | El simulador de decisiones mensuales de la versión anterior, con su informe, evaluación tipo Saber Pro y evidencias. |
 | Aprendizaje | Resultados de aprendizaje, procesos integrados (order to cash, procure to pay, comercio electrónico) y glosario. |
+| Vista del docente | Todo el contenido en una sola página con clave docente: misiones con respuestas, empresas, indicadores, reglas, eventos y preguntas del simulador. Revisa el respaldo de un estudiante sin reemplazar la práctica guardada. |
 | Configuración | Datos de la empresa, IVA, plazos, límite de aprobación de compras, actividad del mercado, módulos visibles, perfil, respaldo y reinicio. |
 
 ### Reloj de operación
@@ -41,7 +42,7 @@ El código de partida del simulador (por ejemplo `MODA-I-12-2-482913-ECWAF-G`) t
 La narración lee guías de módulo, misiones, resúmenes del día, logros y resultados del simulador. Se diseñó para no fallar en clase:
 
 - Divide el texto en fragmentos de máximo 160 caracteres. Chrome corta las locuciones largas cerca de los 15 segundos.
-- Espera la carga de voces y prefiere español de Colombia, luego Latinoamérica y luego España.
+- Espera la carga de voces y prefiere español de Colombia, luego otras variantes de Latinoamérica y, entre ellas, las voces neuronales. Las voces de España solo se usan si el equipo no tiene otra; en ese caso el panel de Audio lo advierte.
 - Un temporizador de vigilancia avanza si el navegador no avisa que terminó un fragmento.
 - La pausa cancela y la reanudación repite el fragmento en curso. Así funciona igual en Android, donde `pause()` falla.
 - Un token de sesión descarta los avisos tardíos de una lectura detenida. Las lecturas nunca se mezclan.
@@ -96,4 +97,5 @@ docs/           Auditoría técnica y guía docente
 ## Documentación
 
 - [Guía docente](docs/GUIA_DOCENTE.md): resultados de aprendizaje, planeación de sesiones, uso del código de partida y rúbrica.
+- [Contenido para el docente](docs/CONTENIDO_DOCENTE.md): todo el contenido con respuestas, generado desde el código con `npm run docs:docente`.
 - [Auditoría técnica](docs/AUDITORIA.md): estado inicial del repositorio, hallazgos, correcciones y verificación.

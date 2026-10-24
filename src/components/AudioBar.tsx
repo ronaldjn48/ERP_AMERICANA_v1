@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { narrator, sfx, useNarrator } from '../audio';
+import { isSpainVoice } from '../audio/narrator';
 import type { AudioPrefs } from '../storage';
 
 const SAMPLE =
@@ -29,8 +30,11 @@ export function AudioBar({ prefs, onChange }: { prefs: AudioPrefs; onChange: (p:
     onChange({ ...prefs, narrator: { ...prefs.narrator, ...patch } });
   };
 
-  const spanish = snap.voices.filter((v) => v.spanish);
+  const latam = snap.voices.filter((v) => v.spanish && !isSpainVoice(v.lang));
+  const spain = snap.voices.filter((v) => v.spanish && isSpainVoice(v.lang));
+  const spanish = [...latam, ...spain];
   const others = snap.voices.filter((v) => !v.spanish);
+  const active = prefs.narrator.voiceURI ? snap.voices.find((v) => v.voiceURI === prefs.narrator.voiceURI) : spanish[0];
 
   return (
     <div className="audio-bar" ref={panelRef}>
@@ -98,10 +102,19 @@ export function AudioBar({ prefs, onChange }: { prefs: AudioPrefs; onChange: (p:
               disabled={!snap.supported || snap.voices.length === 0}
               onChange={(e) => setNarrator({ voiceURI: e.target.value || null })}
             >
-              <option value="">Automática (mejor voz en español)</option>
-              {spanish.length > 0 ? (
-                <optgroup label="Español">
-                  {spanish.map((v) => (
+              <option value="">Automática (español de Colombia o Latinoamérica)</option>
+              {latam.length > 0 ? (
+                <optgroup label="Español de Colombia y Latinoamérica">
+                  {latam.map((v) => (
+                    <option key={v.voiceURI} value={v.voiceURI}>
+                      {v.name} ({v.lang})
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null}
+              {spain.length > 0 ? (
+                <optgroup label="Español de España">
+                  {spain.map((v) => (
                     <option key={v.voiceURI} value={v.voiceURI}>
                       {v.name} ({v.lang})
                     </option>
@@ -120,6 +133,13 @@ export function AudioBar({ prefs, onChange }: { prefs: AudioPrefs; onChange: (p:
             </select>
             {snap.supported && snap.voices.length > 0 && spanish.length === 0 ? (
               <small>No hay voces en español instaladas. Instala una voz en la configuración del sistema operativo.</small>
+            ) : null}
+            {active && isSpainVoice(active.lang) ? (
+              <small>
+                {latam.length > 0
+                  ? 'Esta voz tiene acento de España. Elige una voz de Colombia o Latinoamérica en la lista.'
+                  : 'Este equipo solo tiene voces de España. Para acento latinoamericano usa Chrome (voz "Google español de Estados Unidos") o Edge (voces de Colombia y México), o instala una voz es-CO o es-MX en el sistema operativo.'}
+              </small>
             ) : null}
           </label>
           <label className="stack">

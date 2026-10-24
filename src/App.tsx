@@ -1,5 +1,5 @@
 import { CORE_MODULES } from './erp/meta';
-import { useErp, useRoute } from './erp/store';
+import { useErp, useRoute, useTeacher } from './erp/store';
 import type { ErpState, ModuleKey } from './erp/types';
 import { AccountingModule } from './modules/Accounting';
 import { AutomationModule } from './modules/Automation';
@@ -14,6 +14,7 @@ import { PurchasingModule } from './modules/Purchasing';
 import { SalesModule } from './modules/Sales';
 import { SettingsModule } from './modules/Settings';
 import { SimulatorModule } from './modules/Simulator';
+import { TeacherView } from './modules/Teacher';
 import { Shell } from './shell/Shell';
 
 function ModuleView({ s, module }: { s: ErpState; module: ModuleKey }) {
@@ -50,6 +51,8 @@ function ModuleView({ s, module }: { s: ErpState; module: ModuleKey }) {
 export default function App() {
   const s = useErp();
   const route = useRoute();
+  const teacher = useTeacher();
+  if (teacher) return <TeacherView />;
   if (!s) return <Onboarding />;
   return (
     <Shell s={s}>

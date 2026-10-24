@@ -13,7 +13,7 @@ interface ProductSeed {
   supplier: number;
 }
 
-const CATALOG: Record<string, { products: ProductSeed[]; suppliers: Array<[string, string, string, number, number]> }> = {
+export const CATALOG: Record<string, { products: ProductSeed[]; suppliers: Array<[string, string, string, number, number]> }> = {
   tech: {
     products: [
       { sku: 'AUD-001', name: 'Audífonos inalámbricos Pro', category: 'Audio', unit: 'und', cost: 52000, price: 89000, stock: 60, share: 0.3, supplier: 0 },
@@ -61,7 +61,7 @@ const CATALOG: Record<string, { products: ProductSeed[]; suppliers: Array<[strin
   },
 };
 
-const CUSTOMERS: Array<Omit<Customer, 'id' | 'code' | 'origin' | 'createdDay' | 'active'>> = [
+export const CUSTOMERS: Array<Omit<Customer, 'id' | 'code' | 'origin' | 'createdDay' | 'active'>> = [
   { name: 'Distribuidora Red Nacional S.A.S.', docType: 'NIT', docNumber: '901456123', city: 'Bogotá D.C.', segment: 'Mayorista', email: 'compras@rednacional.com.co', phone: '6013456789', creditLimit: 15000000, paymentTerm: 30 },
   { name: 'Hotel Plaza Central S.A.S.', docType: 'NIT', docNumber: '900789654', city: 'Medellín', segment: 'Corporativo', email: 'suministros@hotelplazacentral.co', phone: '6043214567', creditLimit: 10000000, paymentTerm: 30 },
   { name: 'Comercializadora Punto Alto S.A.S.', docType: 'NIT', docNumber: '901112233', city: 'Cali', segment: 'Mayorista', email: 'gerencia@puntoalto.co', phone: '6023987456', creditLimit: 12000000, paymentTerm: 45 },

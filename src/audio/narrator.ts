@@ -82,7 +82,14 @@ export const DEFAULT_NARRATOR_OPTIONS: NarratorOptions = {
 
 const MAX_CHUNK = 160;
 const CANCEL_GAP_MS = 60;
-const PREFERRED_LANGS = ['es-co', 'es-us', 'es-419', 'es-mx', 'es-es'];
+/** Español de Colombia primero, luego otras variantes latinoamericanas; el español de España queda de último recurso. */
+const PREFERRED_LANGS = ['es-co', 'es-419', 'es-us', 'es-mx', 'es-ve', 'es-pe', 'es-ec', 'es-cl', 'es-ar', 'es-pa', 'es-cr', 'es-do', 'es-gt', 'es-hn', 'es-ni', 'es-sv', 'es-py', 'es-uy', 'es-bo', 'es-pr', 'es-cu'];
+
+/** Voces de España: solo se usan si no hay otra voz en español. */
+export const isSpainVoice = (lang: string) => lang.toLowerCase().replace('_', '-') === 'es-es';
+
+/** Las voces neuronales ("Natural", "Online", "Neural") y las de Google suenan más claras. */
+const qualityRank = (name: string) => (/natural|neural|online/i.test(name) ? 0 : /google/i.test(name) ? 1 : 2);
 
 /** Divide un texto en fragmentos cortos respetando oraciones, luego comas y por último palabras. */
 export function chunkText(text: string, max = MAX_CHUNK): string[] {
@@ -148,11 +155,12 @@ export function sortVoices(voices: VoiceLike[]): VoiceInfo[] {
     const l = lang.toLowerCase().replace('_', '-');
     const i = PREFERRED_LANGS.indexOf(l);
     if (i >= 0) return i;
+    if (l === 'es-es') return PREFERRED_LANGS.length + 1;
     return l.startsWith('es') ? PREFERRED_LANGS.length : 100;
   };
   return voices
     .map((v) => ({ voiceURI: v.voiceURI, name: v.name, lang: v.lang, spanish: v.lang.toLowerCase().startsWith('es') }))
-    .sort((a, b) => rank(a.lang) - rank(b.lang) || a.name.localeCompare(b.name));
+    .sort((a, b) => rank(a.lang) - rank(b.lang) || qualityRank(a.name) - qualityRank(b.name) || a.name.localeCompare(b.name));
 }
 
 type Listener = () => void;

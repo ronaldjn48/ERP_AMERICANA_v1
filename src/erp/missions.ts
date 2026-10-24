@@ -23,6 +23,8 @@ export interface QuestionObjective {
   tolerance: (expected: number) => number;
   unit: 'pesos' | 'unidades' | 'clientes' | 'veces';
   hint: string;
+  /** Explicación de la respuesta para la vista del docente. */
+  solution: string;
   go?: { module: ModuleKey; view?: string };
 }
 
@@ -85,7 +87,7 @@ export const MISSIONS: Mission[] = [
     requires: ['m01'],
     objectives: [
       { id: 'o1', kind: 'check', text: 'Crea un cliente corporativo con NIT, correo y cupo de crédito', check: (s) => st(s, 'cliente_corporativo_completo') >= 1, go: { module: 'crm', view: 'clientes' } },
-      { id: 'o2', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuántos clientes activos tiene la empresa en este momento?', answer: (s) => s.customers.filter((c) => c.active).length, tolerance: exact, unit: 'clientes', hint: 'Mira el contador de la lista de clientes en el CRM.', go: { module: 'crm', view: 'clientes' } },
+      { id: 'o2', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuántos clientes activos tiene la empresa en este momento?', answer: (s) => s.customers.filter((c) => c.active).length, tolerance: exact, unit: 'clientes', hint: 'Mira el contador de la lista de clientes en el CRM.', solution: 'Clientes con estado activo en el CRM. La empresa abre con 6; cada cliente creado suma 1 y cada cliente inactivado resta 1. Se exige el valor exacto.', go: { module: 'crm', view: 'clientes' } },
     ],
   },
   {
@@ -135,7 +137,7 @@ export const MISSIONS: Mission[] = [
       { id: 'o2', kind: 'check', text: 'Despacha un pedido', check: (s) => st(s, 'pedido_despachado') >= 1, go: { module: 'ventas' } },
       { id: 'o3', kind: 'check', text: 'Emite una factura electrónica', check: (s) => st(s, 'pedido_facturado') >= 1, go: { module: 'ventas' } },
       { id: 'o4', kind: 'check', text: 'Registra el pago de un pedido', check: (s) => st(s, 'pedido_pagado') >= 1, go: { module: 'ventas' } },
-      { id: 'o5', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuánto IVA se causó en la última factura que emitiste?', answer: lastUserInvoiceIva, tolerance: pesos, unit: 'pesos', hint: 'Abre el pedido facturado y mira el resumen: subtotal × tarifa de IVA.', go: { module: 'ventas' } },
+      { id: 'o5', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuánto IVA se causó en la última factura que emitiste?', answer: lastUserInvoiceIva, tolerance: pesos, unit: 'pesos', hint: 'Abre el pedido facturado y mira el resumen: subtotal × tarifa de IVA.', solution: 'IVA de la última factura que emitió el estudiante: subtotal después de descuentos × 19 %. Se lee en el resumen del pedido. Tolerancia de 0,1 %.', go: { module: 'ventas' } },
     ],
   },
   {
@@ -165,7 +167,7 @@ export const MISSIONS: Mission[] = [
     objectives: [
       { id: 'o1', kind: 'check', text: 'Registra un ajuste de inventario por conteo físico', check: (s) => st(s, 'ajuste_inventario') >= 1, go: { module: 'inventario' } },
       { id: 'o2', kind: 'check', text: 'Abre el kardex de un producto', check: (s) => Boolean(s.visited['inventario:kardex']), go: { module: 'inventario' } },
-      { id: 'o3', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es el saldo de la cuenta 1435 Mercancías en la contabilidad?', answer: (s) => balanceOf(s.journal, '1435'), tolerance: pesos, unit: 'pesos', hint: 'Contabilidad → Balance de prueba, cuenta 1435.', go: { module: 'contabilidad', view: 'balance' } },
+      { id: 'o3', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es el saldo de la cuenta 1435 Mercancías en la contabilidad?', answer: (s) => balanceOf(s.journal, '1435'), tolerance: pesos, unit: 'pesos', hint: 'Contabilidad → Balance de prueba, cuenta 1435.', solution: 'Saldo débito de la cuenta 1435 en el balance de prueba: valor del inventario a costo promedio en el momento de responder. Tolerancia de 0,1 %.', go: { module: 'contabilidad', view: 'balance' } },
     ],
   },
   {
@@ -180,7 +182,7 @@ export const MISSIONS: Mission[] = [
     requires: ['m07'],
     objectives: [
       { id: 'o1', kind: 'check', text: 'Configura punto de reorden y cantidad de reposición en 3 productos', check: (s) => s.products.filter((p) => p.reorderPoint > 0 && p.reorderQty > 0).length >= 3, go: { module: 'inventario' } },
-      { id: 'o2', kind: 'question', text: 'Resuelve el cálculo', question: 'Un producto vende 4 unidades al día, el proveedor tarda 3 días y quieres 6 unidades de stock de seguridad. ¿Cuál es el punto de reorden?', answer: () => 18, tolerance: exact, unit: 'unidades', hint: 'Demanda diaria × días de entrega + stock de seguridad.' },
+      { id: 'o2', kind: 'question', text: 'Resuelve el cálculo', question: 'Un producto vende 4 unidades al día, el proveedor tarda 3 días y quieres 6 unidades de stock de seguridad. ¿Cuál es el punto de reorden?', answer: () => 18, tolerance: exact, unit: 'unidades', hint: 'Demanda diaria × días de entrega + stock de seguridad.', solution: '4 unidades × 3 días + 6 de seguridad = 18 unidades. Se exige el valor exacto.' },
     ],
   },
   {
@@ -210,7 +212,7 @@ export const MISSIONS: Mission[] = [
       { id: 'o2', kind: 'check', text: 'Aprueba la orden', check: (s) => st(s, 'oc_aprobada') >= 1, go: { module: 'compras' } },
       { id: 'o3', kind: 'check', text: 'Recibe la mercancía cuando llegue', check: (s) => st(s, 'oc_recibida') >= 1, go: { module: 'compras' } },
       { id: 'o4', kind: 'check', text: 'Paga al proveedor', check: (s) => st(s, 'oc_pagada') >= 1, go: { module: 'compras' } },
-      { id: 'o5', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es el saldo actual de la cuenta 2205 Proveedores?', answer: (s) => balanceOf(s.journal, '2205'), tolerance: pesos, unit: 'pesos', hint: 'Contabilidad → Balance de prueba, cuenta 2205. Si pagaste todo, es 0.', go: { module: 'contabilidad', view: 'balance' } },
+      { id: 'o5', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es el saldo actual de la cuenta 2205 Proveedores?', answer: (s) => balanceOf(s.journal, '2205'), tolerance: pesos, unit: 'pesos', hint: 'Contabilidad → Balance de prueba, cuenta 2205. Si pagaste todo, es 0.', solution: 'Saldo crédito de la cuenta 2205: compras recibidas y aún no pagadas, con IVA. Si el estudiante pagó todas las órdenes, es 0. Tolerancia de 0,1 %.', go: { module: 'contabilidad', view: 'balance' } },
     ],
   },
   {
@@ -254,7 +256,7 @@ export const MISSIONS: Mission[] = [
       { id: 'o1', kind: 'check', text: 'Crea una campaña en Meta Ads o TikTok Ads', check: (s) => st(s, 'campana_creada') >= 1, go: { module: 'ecommerce', view: 'campanas' } },
       { id: 'o2', kind: 'check', text: 'Mantén una campaña activa durante 5 días', check: (s) => s.campaigns.some((c) => c.daysRun >= 5), go: { module: 'ecommerce', view: 'campanas' } },
       { id: 'o3', kind: 'check', text: 'Logra un ROAS de 2 o más en una campaña', check: (s) => s.campaigns.some((c) => c.spend > 0 && c.revenue / c.spend >= 2), go: { module: 'ecommerce', view: 'campanas' } },
-      { id: 'o4', kind: 'question', text: 'Resuelve el cálculo', question: 'Si el margen de contribución es 40 %, ¿cuál es el ROAS de equilibrio?', answer: () => 2.5, tolerance: () => 0.05, unit: 'veces', hint: 'ROAS de equilibrio = 1 ÷ margen de contribución.' },
+      { id: 'o4', kind: 'question', text: 'Resuelve el cálculo', question: 'Si el margen de contribución es 40 %, ¿cuál es el ROAS de equilibrio?', answer: () => 2.5, tolerance: () => 0.05, unit: 'veces', hint: 'ROAS de equilibrio = 1 ÷ margen de contribución.', solution: '1 ÷ 0,40 = 2,5. Se aceptan valores entre 2,45 y 2,55.' },
     ],
   },
   {
@@ -270,7 +272,7 @@ export const MISSIONS: Mission[] = [
     objectives: [
       { id: 'o1', kind: 'check', text: 'Abre el balance de prueba', check: (s) => Boolean(s.visited['contabilidad:balance']), go: { module: 'contabilidad', view: 'balance' } },
       { id: 'o2', kind: 'check', text: 'Registra un asiento manual cuadrado', check: (s) => st(s, 'asiento_manual') >= 1, go: { module: 'contabilidad', view: 'diario' } },
-      { id: 'o3', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es el saldo de la cuenta 1110 Bancos en este momento?', answer: (s) => balanceOf(s.journal, '1110'), tolerance: pesos, unit: 'pesos', hint: 'Balance de prueba, cuenta 1110.', go: { module: 'contabilidad', view: 'balance' } },
+      { id: 'o3', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es el saldo de la cuenta 1110 Bancos en este momento?', answer: (s) => balanceOf(s.journal, '1110'), tolerance: pesos, unit: 'pesos', hint: 'Balance de prueba, cuenta 1110.', solution: 'Saldo de la cuenta 1110 Bancos en el balance de prueba en el momento de responder. Tolerancia de 0,1 %.', go: { module: 'contabilidad', view: 'balance' } },
     ],
   },
   {
@@ -332,7 +334,7 @@ export const MISSIONS: Mission[] = [
     objectives: [
       { id: 'o1', kind: 'check', text: 'Completa 30 días de operación', check: (s) => st(s, 'dias_cerrados') >= 30 },
       { id: 'o2', kind: 'check', text: 'Termina un mes con utilidad operacional positiva', check: (s) => st(s, 'mes_con_utilidad') >= 1, go: { module: 'contabilidad', view: 'estados' } },
-      { id: 'o3', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es la utilidad operacional acumulada en el estado de resultados?', answer: (s) => incomeStatement(s.journal).operatingProfit, tolerance: pesos, unit: 'pesos', hint: 'Contabilidad → Estados financieros.', go: { module: 'contabilidad', view: 'estados' } },
+      { id: 'o3', kind: 'question', text: 'Responde la pregunta de verificación', question: '¿Cuál es la utilidad operacional acumulada en el estado de resultados?', answer: (s) => incomeStatement(s.journal).operatingProfit, tolerance: pesos, unit: 'pesos', hint: 'Contabilidad → Estados financieros.', solution: 'Utilidad operacional acumulada desde la apertura: ingresos − costo de ventas − gastos operacionales. Se lee en Estados financieros. Tolerancia de 0,1 %.', go: { module: 'contabilidad', view: 'estados' } },
     ],
   },
   {
